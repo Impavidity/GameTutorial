@@ -31,42 +31,56 @@ public class MainGameLoop {
 		Loader loader = new Loader();
 		
 		RawModel model = OBJLoader.loadObjModel("tree", loader);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("tree"));
-		TexturedModel staticModel = new TexturedModel(model, texture);
+		
+		TexturedModel staticModel = new TexturedModel(model, 
+				new ModelTexture(loader.loadTexture("tree")));
+		
+		TexturedModel grass = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader),
+				new ModelTexture(loader.loadTexture("grassTexture")));
+		grass.getTexture().setHasTransparency(true);
+		grass.getTexture().setUseFakeLighting(true);
+		TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
+				new ModelTexture(loader.loadTexture("fern")));
+		fern.getTexture().setHasTransparency(true);
 		
 		//texture.setShineDamper(10);
 		//texture.setRelectivity(1);
-		Entity entity = new Entity(staticModel, new Vector3f(100,0,0), 0,0,0,1);
+		
+		List<Entity> entities = new ArrayList<Entity>();
+		Random random = new Random();
+		for (int i = 0; i< 500; i++) {
+			entities.add(new Entity(staticModel,
+					new Vector3f(random.nextFloat() * 800 - 400, 0 , random.nextFloat() *- 600),
+					0, 0, 0, 3));
+			entities.add(new Entity(grass,
+					new Vector3f(random.nextFloat()* 800 - 400, 0, random.nextFloat() *-600),
+					0, 0, 0, 1));
+			entities.add(new Entity(fern, 
+					new Vector3f(random.nextFloat()* 800 - 400, 0, random.nextFloat() *- 600),
+					0, 0, 0, 0.6f));
+		}
+		
+		
+		
+		
 		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1,1,1));
 		Camera camera =new Camera();
 		
-		/*
-		List<Entity> allDragons = new ArrayList<Entity>();
-		Random random = new Random();
 		
-		for (int i = 0; i< 10; i++) {
-			float x= random.nextFloat() * 100 - 50;
-			float y = random.nextFloat() * 100 - 50;
-			float z = random.nextFloat() * -300;
-			allDragons.add(new Entity(staticModel, new Vector3f(x,y,z), random.nextFloat()*180f, random.nextFloat()*180f, 0f, 01f));
-		}
-		*/
-		
-		Terrain terrain = new Terrain(0,0,loader, new ModelTexture(loader.loadTexture("grass")));
-		Terrain terrain2 = new Terrain(1,0,loader, new ModelTexture(loader.loadTexture("grass")));
+		Terrain terrain = new Terrain(-1,-1,loader, new ModelTexture(loader.loadTexture("grass")));
+		Terrain terrain2 = new Terrain(0, -1,loader, new ModelTexture(loader.loadTexture("grass")));
 		
 		
 		
 		MasterRenderer renderer = new MasterRenderer();
 		while(!Display.isCloseRequested()){
-			entity.increaseRotation(0, 1, 0);
+			
 			camera.move();
-			/*
-			for (Entity dragon: allDragons) {
-				renderer.processEntity(dragon);
+			
+			for (Entity entity: entities) {
+				renderer.processEntity(entity);
 			}
-			*/
-			renderer.processEntity(entity);
+			
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
 				
