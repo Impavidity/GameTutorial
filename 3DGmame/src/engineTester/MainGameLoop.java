@@ -107,13 +107,13 @@ public class MainGameLoop {
 		flower.getTexture().setHasTransparency(true);
 		flower.getTexture().setUseFakeLighting(true);
 		
-		ModelData bunnyData = OBJFileLoader.loadOBJ("bunny");
+		ModelData bunnyData = OBJFileLoader.loadOBJ("person");
 		RawModel bunnyModel = loader.loadToVAO(bunnyData.getVertices(), 
 				bunnyData.getTextureCoords(), 
 				bunnyData.getNormals(),
 				bunnyData.getIndices());
 		TexturedModel bunny = new TexturedModel(bunnyModel,
-				new ModelTexture(loader.loadTexture("white")));
+				new ModelTexture(loader.loadTexture("playerTexture")));
 		
 		Player player = new Player(bunny, new Vector3f(100, 0 , -50), 0 ,0, 0, 1);
 		
@@ -141,12 +141,12 @@ public class MainGameLoop {
 		
 		
 		
-		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1,1,1));
+		Light light = new Light(new Vector3f(0, 2000, 0), new Vector3f(1,1,1));
 		Camera camera =new Camera(player);
 		
 		
-		Terrain terrain = new Terrain(-1,-1,loader, texturePack, blendMap);
-		Terrain terrain2 = new Terrain(0, -1,loader, texturePack, blendMap);
+		Terrain terrain = new Terrain(-1,-1,loader, texturePack, blendMap, "heightmap");
+		Terrain terrain2 = new Terrain(0, -1,loader, texturePack, blendMap, "heightmap");
 		
 		
 		
