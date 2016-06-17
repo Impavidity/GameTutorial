@@ -23,11 +23,15 @@ public class EntityDetect {
 			for (Entity entity : entities) {
 				if (playerIsNearEntity(positionPlayer, entity.getPosition()) && 
 						mouseIsNearEntity(position, entity.getPosition() )) {
-					entity.setValid(false);
-					
+					int type = entity.getEntityType();
+					if (type == playerType){
+						entity.setValid(true);
+					}else {
+						entity.setValid(false);
+					}
 					if(entity.isClicked() == false){
 						entity.setClicked(true);
-						int type = entity.getEntityType();
+						
 						count.setCount(type);
 						System.out.println(getTypeName(type) + "  :  " + count.getCount(type));
 					}
