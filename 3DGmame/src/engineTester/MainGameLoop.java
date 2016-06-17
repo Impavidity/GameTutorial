@@ -1,16 +1,30 @@
 package engineTester;
 
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.TrueTypeFont;
+import org.omg.CORBA.PUBLIC_MEMBER;
+
+import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
 
 import entities.Camera;
+import entities.Count;
 import entities.Entity;
+import entities.EntityDetect;
 import entities.Light;
 import entities.Player;
+import guis.GuiRenderer;
+import guis.GuiTexture;
 import models.RawModel;
 import models.TexturedModel;
 import objConverter.ModelData;
@@ -25,11 +39,24 @@ import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
+import toolbox.MousePicker;
+import water.WaterFrameBuffers;
+import water.WaterRenderer;
+import water.WaterShader;
+import water.WaterTile;
 
 public class MainGameLoop {
 
+    public static final int treeType=1;
+	public static final int flowerType = 2;
+	public static final int fernType = 3;
+	public static final int lowtreeType = 4;
+	public static final int lampType =  5;
+	public static final int playerType = 6;
+	
 	public static void main(String[] args) {
-
+		
+		
 
 		DisplayManager.createDisplay();
 		
@@ -84,6 +111,15 @@ public class MainGameLoop {
 				new ModelTexture(loader.loadTexture("fernTexture")));
 		fern.getTexture().setHasTransparency(true);
 		
+		ModelData lampData = OBJFileLoader.loadOBJ("lamp");
+		RawModel lampModel = loader.loadToVAO(lampData.getVertices(), 
+				lampData.getTextureCoords(), 
+				lampData.getNormals(),
+				lampData.getIndices());
+		TexturedModel lamp = new TexturedModel(lampModel,
+				new ModelTexture(loader.loadTexture("lamp")));
+		lamp.getTexture().setHasTransparency(true);
+		
 		//texture.setShineDamper(10);
 		//texture.setRelectivity(1);
 		
@@ -116,59 +152,152 @@ public class MainGameLoop {
 				new ModelTexture(loader.loadTexture("playerTexture")));
 		
 		Player player = new Player(bunny, new Vector3f(100, 0 , -50), 0 ,0, 0, 1);
+		List<Terrain>terrains = new ArrayList<Terrain>();
+		Terrain terrain = new Terrain(0,-1,loader, texturePack, blendMap, "heightmap");
+		terrains.add(terrain);
 		
 		
 		List<Entity> entities = new ArrayList<Entity>();
 		Random random = new Random();
 		for (int i = 0; i< 500; i++) {
-			entities.add(new Entity(tree,
+			if(i % 10 == 0){
+				float x = random.nextFloat() *800;
+				float z = random.nextFloat() *-600;
+				float y = terrain.getHeightOfTerrain(x, z);
+				entities.add(new Entity(fern, 
+						new Vector3f(x, y, z),
+						0, random.nextFloat() * 360, 0, 0.9f,fernType));
+			}
+			if (i%6 == 0){
+				float x = random.nextFloat() *800;
+				float z = random.nextFloat() *-600;
+				float y = terrain.getHeightOfTerrain(x, z);
+				entities.add(new Entity(flower,
+						new Vector3f(x,y,z),
+						0, 0, 0, 1f, flowerType));
+				
+			}
+			if (i%10 == 0){
+				float x = random.nextFloat() *800;
+				float z = random.nextFloat() *-600;
+				float y = terrain.getHeightOfTerrain(x, z);
+				entities.add(new Entity(tree,
+						new Vector3f(x,y,z),
+						0, 0, 0, 1f, treeType));				
+			}
+			if (i%18 == 0){
+				float x = random.nextFloat() *800;
+				float z = random.nextFloat() *-600;
+				float y = terrain.getHeightOfTerrain(x, z);
+				entities.add(new Entity(lowPolyTree,
+						new Vector3f(x, y, z),
+						0, 0, 0, 1f, lowtreeType) );
+				
+			}
+			entities.add(player);
+/*			entities.add(new Entity(tree,
 					new Vector3f(random.nextFloat() * 800 - 400, 0 , random.nextFloat() *- 600),
 					0, 0, 0, 3));
 			entities.add(new Entity(grass,
 					new Vector3f(random.nextFloat()* 800 - 400, 0, random.nextFloat() *-600),
 					0, 0, 0, 1));
-			entities.add(new Entity(fern, 
-					new Vector3f(random.nextFloat()* 800 - 400, 0, random.nextFloat() *- 600),
-					0, 0, 0, 0.6f));
+
 			entities.add(new Entity(lowPolyTree,
 					new Vector3f(random.nextFloat() * 800 - 400, 0 , random.nextFloat() *- 600),
-					0, 0, 0, 0.5f));
-			entities.add(new Entity(flower,
-					new Vector3f(random.nextFloat() * 800 - 400, 0 , random.nextFloat() *- 600),
-					0, 0, 0, 1f));
+					0, 0, 0, 0.5f));*/
+			
 		}
 		
+		List<Light> lights = new ArrayList<Light>();
+		lights.add(new Light(new Vector3f(400, 1000, -400), new Vector3f(0.2f, 0.2f, 0.2f)));
+		lights.add(new Light(new Vector3f(165, 10, -293), new Vector3f(2, 0, 0), new Vector3f(1f, 0.01f, 0.02f)));
+		lights.add(new Light(new Vector3f(370, 17, -300), new Vector3f(0, 2, 2), new Vector3f(1f, 0.01f, 0.02f)));
+		//lights.add(new Light(new Vector3f(293, 7, -305), new Vector3f(2, 2, 0), new Vector3f(1, 0.01f, 0.02f)));
+		
+		entities.add(new Entity(lamp, new Vector3f(165,terrain.getHeightOfTerrain(165, -293),-293),	0, 0, 0, 1f, lampType));
 		
 		
-		
-		Light light = new Light(new Vector3f(0, 2000, 0), new Vector3f(1,1,1));
 		Camera camera =new Camera(player);
 		
+		List<GuiTexture> guis = new ArrayList<GuiTexture>();
+	//	GuiTexture gui = new GuiTexture(loader.loadTexture("socuwan"),new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
+	//	guis.add(gui);
+		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		
-		Terrain terrain = new Terrain(-1,-1,loader, texturePack, blendMap, "heightmap");
-		Terrain terrain2 = new Terrain(0, -1,loader, texturePack, blendMap, "heightmap");
 		
 		
+		//Terrain terrain2 = new Terrain(0, 2,loader, texturePack, blendMap, "heightmap");
 		
-		MasterRenderer renderer = new MasterRenderer();
+		MasterRenderer renderer = new MasterRenderer(loader);
+		
+		MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
+		
+		Entity lampEntity = new Entity(lamp, new Vector3f(293, -6.8f, -305)
+				, 0, 0, 0, 1, lampType);
+		entities.add(lampEntity);
+		Light light = new Light(new Vector3f(200, 7, -305), new Vector3f(0, 2, 2), new Vector3f(1f, 0.01f, 0.02f));
+		lights.add(light);
+			
+		EntityDetect entityDetect = new EntityDetect();
+		Count count = new Count();
+		
+		//TrueTypeFont font;
+		//Font awtFont = new Font("Times New Roman", Font.BOLD, 24);
+		//font = new TrueTypeFont(awtFont, false);
+		
+		//font.drawString(100, 50, "Hello world", Color.yellow);
+		
+		/* *********************** water render set up*********************   */
+		WaterShader waterShader = new WaterShader();
+		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix());
+		List<WaterTile> waters = new ArrayList<WaterTile>();
+		waters.add(new WaterTile(75, -75, 0));
+		WaterFrameBuffers fbos = new WaterFrameBuffers();
+		GuiTexture gui = new GuiTexture(fbos.getReflectionTexture(), new Vector2f(-0.5f,  0.5f), new Vector2f(0.5f, 0.5f));
+		guis.add(gui);
+		
+		
+		//******************************Gameloop  Begin*********************
 		while(!Display.isCloseRequested()){
 			
 			camera.move();
-			player.move();
-			renderer.processEntity(player);
+			player.move(terrain);
+			picker.update();
+			Vector3f terrainPoint = picker.getCurrentTerrainPoint();
 			
-			for (Entity entity: entities) {
-				renderer.processEntity(entity);
+			//click the tree 
+			if(terrainPoint != null){
+				entityDetect.isEntity(terrainPoint, entities, player.getPosition(), count);
 			}
 			
+			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
+			
+			
+			fbos.bindReflectionFrameBuffer();
+			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, -1, 0, 15));
+			fbos.unbindCurrentFrameBuffer();
+			
+/*			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
-			renderer.processTerrain(terrain2);
+			for (Entity entity: entities) {
+				renderer.processEntity(entity);
+			}*/
+			
+			
+			
+			
+		//	renderer.processTerrain(terrain2);
 				
-			renderer.render(light, camera);
+			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, -1, 0, 15));
+			waterRenderer.render(waters, camera);
+			guiRenderer.render(guis); 
 			DisplayManager.updateDisplay();
 			
 		}
-		renderer.clearUp();
+		fbos.cleanUp();
+		waterShader.cleanUp();
+		guiRenderer.cleanup();
+		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
 

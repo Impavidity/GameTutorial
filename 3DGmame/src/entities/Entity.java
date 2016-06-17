@@ -2,6 +2,8 @@ package entities;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import com.sun.jmx.snmp.tasks.ThreadService;
+
 import models.TexturedModel;
 
 public class Entity {
@@ -9,14 +11,31 @@ public class Entity {
 	private Vector3f position;
 	private float rotX, rotY, rotZ;
 	private float scale;
+	private boolean valid = true;
+	private boolean clicked = false;
+	private int entityType = 0;
 	
-	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+	private int textureIndex = 0; 
+	
+	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale, int entityType) {
+		
 		this.model = model;
 		this.position = position;
 		this.rotX = rotX;
 		this.rotY = rotY;
 		this.rotZ = rotZ;
 		this.scale = scale;
+		this.entityType = entityType;
+	}
+	public Entity(TexturedModel model, int index,  Vector3f position, float rotX, float rotY, float rotZ, float scale, int entityType) {
+		this.textureIndex = index; 
+		this.model = model;
+		this.position = position;
+		this.rotX = rotX;
+		this.rotY = rotY;
+		this.rotZ = rotZ;
+		this.scale = scale;
+		this.entityType = entityType;
 	}
 	
 	public void increasePosition(float dx, float dy, float dz) {
@@ -31,6 +50,14 @@ public class Entity {
 		this.rotZ += dz;
 	}
 
+	public float getTextureXOffset() {
+		int column = textureIndex % model.getTexture().getNumberOfRows();
+		return (float)column / (float)model.getTexture().getNumberOfRows();
+	}
+	public float getTextureYOffset() {
+		int row = textureIndex / model.getTexture().getNumberOfRows();
+		return (float)row / (float)model.getTexture().getNumberOfRows();
+	}
 	public void setModel(TexturedModel model) {
 		this.model = model;
 	}
@@ -78,6 +105,27 @@ public class Entity {
 	public float getScale() {
 		return scale;
 	}
+	
+	public boolean isValid() {
+		return valid;
+	}
+	
+	public void setValid(boolean valid) {
+		this.valid = valid;
+	}
+	public boolean isClicked() {
+		return clicked;
+	}
+	public void setClicked(boolean clicked) {
+		this.clicked = clicked;
+	}
+	public int getEntityType() {
+		return entityType;
+	}
+	public void setEntityType(int entityType) {
+		this.entityType = entityType;
+	}
+	
 	
 	
 	

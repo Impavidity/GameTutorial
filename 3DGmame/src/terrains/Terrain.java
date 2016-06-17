@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
 
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import models.RawModel;
@@ -14,6 +15,7 @@ import renderEngine.Loader;
 import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
+import toolbox.Maths;
 
 public class Terrain {
 	private static final float SIZE = 800;
@@ -106,12 +108,26 @@ public class Terrain {
 		float gridSquareSize = SIZE / ((float)heights.length - 1);
 		int gridX = (int) Math.floor(terrainX / gridSquareSize);
 		int gridZ = (int) Math.floor(terrainZ / gridSquareSize);
-		/*
-		if (gridX >= heights.length - 1 || gridZ >= heights.length - 1 || girdX < 0 || gridZ < 0) {
+		
+		if (gridX >= heights.length - 1 || gridZ >= heights.length - 1 || gridX < 0 || gridZ < 0) {
 			return 0;
 		}
-		*/
-		return 0;
+		float xCoord = (terrainX %  gridSquareSize) / gridSquareSize;
+		float zCoord = (terrainZ %  gridSquareSize) / gridSquareSize;
+		float answer;
+		if (xCoord <=  zCoord ){
+			answer = Maths.barryCentrix(new Vector3f(0, heights[gridX][gridZ], 0),
+																new Vector3f(1, heights[gridX+1][gridZ], 0),
+																new Vector3f(0, heights[gridX][gridZ+1], 1),
+																new Vector2f(xCoord, zCoord));
+		}
+		else {
+			answer = Maths.barryCentrix(new Vector3f(1, heights[gridX+1][gridZ], 0),
+					new Vector3f(1, heights[gridX+1][gridZ+1], 1),
+					new Vector3f(0, heights[gridX][gridZ+1], 1),
+					new Vector2f(xCoord, zCoord));
+		}
+		return answer;
 	}
 
 
@@ -125,9 +141,6 @@ public class Terrain {
 		}
 		int VERTEX_COUNT = image.getHeight();
 		heights = new float[VERTEX_COUNT][VERTEX_COUNT];
-		
-		
-		
 		
 		int count = VERTEX_COUNT * VERTEX_COUNT;
 		float[] vertices = new float[count * 3];
