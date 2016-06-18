@@ -60,7 +60,9 @@ public class EntityRenderer {
 		}
 		shader.loadFakeLightingVariable(texture.isUseFakeLighting());
 		shader.loadShineVariables(texture.getShineDamper(),texture.getRelectivity());
+		// active first texutre unit in GPU
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		// bind texture
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getID());
 		
 	}

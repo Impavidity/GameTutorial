@@ -12,6 +12,7 @@ import java.util.List;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL15;
@@ -93,6 +94,8 @@ public class Loader {
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 		textures.add(texID);
+		//GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+		//GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
 		return texID;
 	}
 	
@@ -126,13 +129,20 @@ public class Loader {
 	}
 	
 	private void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data){
-		int vboID = GL15.glGenBuffers();
+		int vboID = GL15.glGenBuffers(); // generate vbo
 		vbos.add(vboID);
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-		FloatBuffer buffer = storeDataInFloatBuffer(data);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-		GL20.glVertexAttribPointer(attributeNumber,coordinateSize, GL11.GL_FLOAT,false,0,0);
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID); // bind buffer
+		FloatBuffer buffer = storeDataInFloatBuffer(data); // get buffer data 
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW); // store data
+		GL20.glVertexAttribPointer(attributeNumber,coordinateSize, GL11.GL_FLOAT,false,0,0); // bind the vbo to one attribute of vao
+		// index(specify the location where the shader expects this data)
+		// size(1-4 dimension coordinates)
+		// type(int or float or else)
+		// normalization
+		// stride
+		// offset(specifies a offset of the first component of the first component i the array in the data store of the buffer)
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		// after we have finished with our VBO, we can unbind it and the vao
 	}
 	
 	private void unbindVAO(){

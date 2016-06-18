@@ -32,7 +32,6 @@ import objConverter.OBJFileLoader;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
-import renderEngine.OBJLoader;
 import renderEngine.EntityRenderer;
 import shaders.StaticShader;
 import terrains.Terrain;
@@ -151,7 +150,7 @@ public class MainGameLoop {
 		TexturedModel bunny = new TexturedModel(bunnyModel,
 				new ModelTexture(loader.loadTexture("playerTexture")));
 		
-		Player player = new Player(bunny, new Vector3f(100, 0 , -50), 0 ,0, 0, 1);
+		Player player = new Player(bunny, new Vector3f(100, 250 , -50), 0 ,0, 0, 1);
 		List<Terrain>terrains = new ArrayList<Terrain>();
 		Terrain terrain = new Terrain(0,-1,loader, texturePack, blendMap, "heightmap");
 		terrains.add(terrain);
@@ -220,8 +219,8 @@ public class MainGameLoop {
 		Camera camera =new Camera(player);
 		
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();
-	//	GuiTexture gui = new GuiTexture(loader.loadTexture("socuwan"),new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
-	//	guis.add(gui);
+		GuiTexture gui = new GuiTexture(loader.loadTexture("socuwan"),new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
+		guis.add(gui);
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		
 		
