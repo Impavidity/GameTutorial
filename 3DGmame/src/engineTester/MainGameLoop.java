@@ -73,6 +73,14 @@ public class MainGameLoop {
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 		// ***************************************
 		
+		ModelData palletData = OBJFileLoader.loadOBJ("house");
+		RawModel palletModel = loader.loadToVAO(palletData.getVertices(),
+				palletData.getTextureCoords(),
+				palletData.getNormals(),
+				palletData.getIndices());
+		TexturedModel pallet = new TexturedModel(palletModel,
+				new ModelTexture(loader.loadTexture("house")));
+		
 		ModelData treeData = OBJFileLoader.loadOBJ("tree");
 		
 		RawModel treeModel = loader.loadToVAO(treeData.getVertices(), 
@@ -177,6 +185,14 @@ public class MainGameLoop {
 						new Vector3f(x,y,z),
 						0, 0, 0, 1f, flowerType));
 				
+			}
+			if (i%7 == 0) {
+				float x = random.nextFloat() * 800;
+				float z = random.nextFloat() * 800;
+				float y = terrain.getHeightOfTerrain(x,	z);
+				entities.add(new Entity(pallet,
+						new Vector3f(x,y,z),
+						0, 0, 0, 1f, flowerType));
 			}
 			if (i%10 == 0){
 				float x = random.nextFloat() *800;

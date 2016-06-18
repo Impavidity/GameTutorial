@@ -45,7 +45,7 @@ public class Entity {
 	public boolean noEntity(Vector3f newPosition) {
 		int x = (int)newPosition.x;
 		int z = (int)newPosition.z;
-		if ( x < 0 || x >=Terrain.getSize() || z < 0 || z >= Terrain.getSize()) return false;
+		if ( x <= 0 || x >=Terrain.getSize() || z <= 0 || z >= Terrain.getSize()) return false;
 		if (MainGameLoop.detectMap[x][z])
 			return false;
 		return true;
