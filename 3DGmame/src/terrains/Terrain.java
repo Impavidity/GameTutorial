@@ -115,7 +115,7 @@ public class Terrain {
 		float xCoord = (terrainX %  gridSquareSize) / gridSquareSize;
 		float zCoord = (terrainZ %  gridSquareSize) / gridSquareSize;
 		float answer;
-		if (xCoord <=  zCoord ){
+		if (xCoord <=  1-zCoord ){
 			answer = Maths.barryCentrix(new Vector3f(0, heights[gridX][gridZ], 0),
 																new Vector3f(1, heights[gridX+1][gridZ], 0),
 																new Vector3f(0, heights[gridX][gridZ+1], 1),
