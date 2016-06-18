@@ -5,6 +5,9 @@ import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
+import engineTester.MainGameLoop;
+import terrains.Terrain;
+
 
 
 public class EntityDetect {
@@ -28,6 +31,13 @@ public class EntityDetect {
 						entity.setValid(true);
 					}else {
 						entity.setValid(false);
+						int x = (int)entity.getPosition().x;
+						int z = (int)entity.getPosition().z;
+						for (int p = x-5; p<=x+5; p++)
+							for ( int q = z-5; q<=z+5; q++) {
+								if (p<0 || p>Terrain.getSize() || q<0 || q>Terrain.getSize()) continue;
+								MainGameLoop.detectMap[p][q] = false;
+							}
 					}
 					if(entity.isClicked() == false){
 						entity.setClicked(true);
@@ -70,5 +80,7 @@ public class EntityDetect {
 			return "UndefinedType";
 		}
 	}
+	
+
 
 }

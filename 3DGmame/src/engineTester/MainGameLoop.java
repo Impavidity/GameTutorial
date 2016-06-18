@@ -53,6 +53,8 @@ public class MainGameLoop {
 	public static final int lampType =  5;
 	public static final int playerType = 6;
 	
+	public static boolean [][] detectMap = new boolean[(int)Terrain.getSize()][(int)Terrain.getSize()];
+	
 	public static void main(String[] args) {
 		
 		
@@ -150,9 +152,9 @@ public class MainGameLoop {
 		TexturedModel bunny = new TexturedModel(bunnyModel,
 				new ModelTexture(loader.loadTexture("playerTexture")));
 		
-		Player player = new Player(bunny, new Vector3f(100, 250 , -50), 0 ,0, 0, 1);
+		Player player = new Player(bunny, new Vector3f(100, 250 , 50), 0 ,0, 0, 1);
 		List<Terrain>terrains = new ArrayList<Terrain>();
-		Terrain terrain = new Terrain(0,-1,loader, texturePack, blendMap, "heightmap");
+		Terrain terrain = new Terrain(0,0,loader, texturePack, blendMap, "heightmap");
 		terrains.add(terrain);
 		
 		
@@ -161,7 +163,7 @@ public class MainGameLoop {
 		for (int i = 0; i< 500; i++) {
 			if(i % 10 == 0){
 				float x = random.nextFloat() *800;
-				float z = random.nextFloat() *-600;
+				float z = random.nextFloat() *800;
 				float y = terrain.getHeightOfTerrain(x, z);
 				entities.add(new Entity(fern, 
 						new Vector3f(x, y, z),
@@ -169,7 +171,7 @@ public class MainGameLoop {
 			}
 			if (i%6 == 0){
 				float x = random.nextFloat() *800;
-				float z = random.nextFloat() *-600;
+				float z = random.nextFloat() *800;
 				float y = terrain.getHeightOfTerrain(x, z);
 				entities.add(new Entity(flower,
 						new Vector3f(x,y,z),
@@ -178,19 +180,34 @@ public class MainGameLoop {
 			}
 			if (i%10 == 0){
 				float x = random.nextFloat() *800;
-				float z = random.nextFloat() *-600;
+				float z = random.nextFloat() *800;
 				float y = terrain.getHeightOfTerrain(x, z);
 				entities.add(new Entity(tree,
 						new Vector3f(x,y,z),
-						0, 0, 0, 1f, treeType));				
+						0, 0, 0, 1f, treeType));
+				for (int p=(int)x -5 ; p<=(int)x +5; p++) 
+					for (int q=(int)z -5; q<=(int)z+5; q++) {
+						if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
+							continue;
+						detectMap[p][q] = true;
+					}
+						
+				
 			}
 			if (i%18 == 0){
 				float x = random.nextFloat() *800;
-				float z = random.nextFloat() *-600;
+				float z = random.nextFloat() *800;
 				float y = terrain.getHeightOfTerrain(x, z);
 				entities.add(new Entity(lowPolyTree,
 						new Vector3f(x, y, z),
 						0, 0, 0, 1f, lowtreeType) );
+				
+				for (int p=(int)x -5 ; p<=(int)x +5; p++) 
+					for (int q=(int)z -5; q<=(int)z+5; q++) {
+						if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
+							continue;
+						detectMap[p][q] = true;
+					}
 				
 			}
 			entities.add(player);
@@ -198,7 +215,7 @@ public class MainGameLoop {
 					new Vector3f(random.nextFloat() * 800 - 400, 0 , random.nextFloat() *- 600),
 					0, 0, 0, 3));
 			entities.add(new Entity(grass,
-					new Vector3f(random.nextFloat()* 800 - 400, 0, random.nextFloat() *-600),
+					new Vector3f(random.nextFloat()* 800 - 400, 0, random.nextFloat() *800),
 					0, 0, 0, 1));
 
 			entities.add(new Entity(lowPolyTree,
@@ -258,7 +275,7 @@ public class MainGameLoop {
 		while(!Display.isCloseRequested()){
 			
 			camera.move();
-			player.move(terrain);
+			player.move(terrain, entities);
 			picker.update();
 			Vector3f terrainPoint = picker.getCurrentTerrainPoint();
 			

@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.List;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -27,7 +29,7 @@ public class Player extends Entity {
 		super(model, position, rotX, rotY, rotZ, scale, 6);
 	}
 	
-	public void move(Terrain terrain) {
+	public void move(Terrain terrain, List<Entity> entities) {
 		checkInputs();
 		
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
