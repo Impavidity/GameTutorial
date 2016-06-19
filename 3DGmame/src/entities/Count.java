@@ -45,4 +45,24 @@ public class Count {
 			break;
 		}
 	}
+	
+	public void clearCount(int type) {
+		switch (type) {
+		case treeType:
+			treeCount = 0;
+			break;
+		case fernType:
+			fernCount = 0;
+			break;
+		case lowtreeType:
+			lowtreeCount = 0;
+			break;
+		case flowerType:
+			flowerCount = 0;
+			break;
+		default:
+			break;
+		
+		}
+	}
 }

@@ -1,6 +1,7 @@
 package engineTester;
 
 import java.awt.Font;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -23,6 +24,10 @@ import entities.Entity;
 import entities.EntityDetect;
 import entities.Light;
 import entities.Player;
+import fontMeshCreator.FontType;
+import fontMeshCreator.GUIText;
+import fontRendering.TextMaster;
+import guis.GUIControl;
 import guis.GuiRenderer;
 import guis.GuiTexture;
 import models.RawModel;
@@ -53,15 +58,22 @@ public class MainGameLoop {
 	public static final int lampType =  5;
 	public static final int playerType = 6;
 	
+	public static int textTime = 0;
+	
 	public static boolean [][] detectMap = new boolean[(int)Terrain.getSize()][(int)Terrain.getSize()];
+	public static float UIratio;
 	
 	public static void main(String[] args) {
 		
 		
 
 		DisplayManager.createDisplay();
-		
+		UIratio = (float)DisplayManager.WIDTH / (float)DisplayManager.HEIGHT;
 		Loader loader = new Loader();
+		
+		// Text
+		TextMaster.init(loader);
+		FontType font = new FontType(loader.loadTexture("arial"), new File("res/arial.fnt"));
 		
 		// ********Terrain Texture Stuff *********
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
@@ -252,7 +264,9 @@ public class MainGameLoop {
 		Camera camera =new Camera(player);
 		
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();
-		GuiTexture gui = new GuiTexture(loader.loadTexture("socuwan"),new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
+		
+		GuiTexture gui = new GuiTexture(loader.loadTexture("wood"),new Vector2f(-0.9f, 0.8f), new Vector2f(0.08f, 0.08f*UIratio));
+		
 		guis.add(gui);
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		
@@ -269,9 +283,13 @@ public class MainGameLoop {
 		entities.add(lampEntity);
 		Light light = new Light(new Vector3f(200, 7, -305), new Vector3f(0, 2, 2), new Vector3f(1f, 0.01f, 0.02f));
 		lights.add(light);
-			
-		EntityDetect entityDetect = new EntityDetect();
+		
+		List<GUIText> packText = new ArrayList<GUIText>();
 		Count count = new Count();
+		EntityDetect entityDetect = new EntityDetect(font, count, packText);
+		
+		GUIControl uiManager = new GUIControl(count, guis, loader, packText, font);
+		
 		
 		//TrueTypeFont font;
 		//Font awtFont = new Font("Times New Roman", Font.BOLD, 24);
@@ -287,6 +305,8 @@ public class MainGameLoop {
 		WaterTile water = new WaterTile(-500, 250, 0);
 		waters.add(water);
 		
+		
+		
 		//******************************Gameloop  Begin*********************
 		while(!Display.isCloseRequested()){
 			
@@ -297,7 +317,7 @@ public class MainGameLoop {
 			
 			//click the tree 
 			if(terrainPoint != null){
-				entityDetect.isEntity(terrainPoint, entities, player.getPosition(), count);
+				entityDetect.isEntity(terrainPoint, entities, player.getPosition());
 			}
 			
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
@@ -320,9 +340,24 @@ public class MainGameLoop {
 			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, -1, 0, 10000));
 			waterRenderer.render(waters, camera,sun);
 			guiRenderer.render(guis); 
+			
+			if (entityDetect.getTextStatus()) {
+				textTime += 1;
+				if (textTime == 100) {
+					entityDetect.textShutDown();
+				}
+				System.out.println(textTime);
+			}
+			
+			
+			uiManager.check();
+			uiManager.checkUIClick();
+			TextMaster.render();
+			
 			DisplayManager.updateDisplay();
 			
 		}
+		TextMaster.cleanUp(); 
 		buffers.cleanUp();
 		waterShader.cleanUp();
 		guiRenderer.cleanup();

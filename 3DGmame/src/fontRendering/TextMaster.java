@@ -20,6 +20,10 @@ public class TextMaster {
 		loader = theLoader;
 	}
 	
+	public static void render() {
+		renderer.render(texts);
+	}
+	
 	public static void loadText(GUIText text) {
 		FontType font = text.getFont();
 		TextMeshData data = font.loadText(text);
@@ -30,11 +34,19 @@ public class TextMaster {
 			textBatch = new ArrayList<GUIText>();
 			texts.put(font, textBatch);
 		}
-		
+		textBatch.add(text);
+	}
+	
+	public static void cleanUp() {
+		renderer.cleanUp();
 	}
 	
 	public static void removeText(GUIText text) {
 		List<GUIText> textBatch = texts.get(text.getFont());
+		textBatch.remove(text);
+		if (textBatch.isEmpty()) {
+			texts.remove(texts.get(text.getFont()));
+		}
 	}
 }
 
