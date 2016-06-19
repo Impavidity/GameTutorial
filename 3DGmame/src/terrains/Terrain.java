@@ -79,7 +79,7 @@ public class Terrain {
 		height += MAX_PIXEL_COLOUR / 2f;
 		height /= MAX_PIXEL_COLOUR / 2f;
 		height *= MAX_HEIGHT;
-		return height;
+		return height + 10;
 	}
 
 

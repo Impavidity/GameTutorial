@@ -1,10 +1,14 @@
 package entities;
 
+import java.util.List;
+
 import org.lwjgl.util.vector.Vector3f;
 
 import com.sun.jmx.snmp.tasks.ThreadService;
 
+import engineTester.MainGameLoop;
 import models.TexturedModel;
+import terrains.Terrain;
 
 public class Entity {
 	private TexturedModel model;
@@ -38,10 +42,23 @@ public class Entity {
 		this.entityType = entityType;
 	}
 	
+	public boolean noEntity(Vector3f newPosition) {
+		int x = (int)newPosition.x;
+		int z = (int)newPosition.z;
+		if ( x <= 0 || x >=Terrain.getSize() || z <= 0 || z >= Terrain.getSize()) return false;
+		if (MainGameLoop.detectMap[x][z])
+			return false;
+		return true;
+	}
+	
+	
 	public void increasePosition(float dx, float dy, float dz) {
-		this.position.x += dx;
-		this.position.y += dy;
-		this.position.z += dz;
+		Vector3f newPosition = new Vector3f(this.position.x+dx, this.position.y+dy, this.position.z+dz);
+		if (noEntity(newPosition)) {
+			this.position.x += dx;
+			this.position.y += dy;
+			this.position.z += dz;
+		}
 	}
 	
 	public void increaseRotation(float dx,float dy, float dz) {
@@ -126,8 +143,7 @@ public class Entity {
 		this.entityType = entityType;
 	}
 	
-	
-	
+
 	
 	
 }

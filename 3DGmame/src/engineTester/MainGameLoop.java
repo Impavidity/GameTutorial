@@ -1,7 +1,7 @@
 package engineTester;
 
 import java.awt.Font;
-import java.awt.peer.KeyboardFocusManagerPeer;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -25,6 +25,10 @@ import entities.Entity;
 import entities.EntityDetect;
 import entities.Light;
 import entities.Player;
+import fontMeshCreator.FontType;
+import fontMeshCreator.GUIText;
+import fontRendering.TextMaster;
+import guis.GUIControl;
 import guis.GuiRenderer;
 import guis.GuiTexture;
 import models.RawModel;
@@ -58,14 +62,23 @@ public class MainGameLoop {
 	public static final int lampType =  5;
 	public static final int playerType = 6;
 	
+	public static int textTime = 0;
+	
+	public static boolean [][] detectMap = new boolean[(int)Terrain.getSize()][(int)Terrain.getSize()];
+	public static float UIratio;
+	
 	public static void main(String[] args) {
 		
 		
 
 		DisplayManager.createDisplay();
-		
+		UIratio = (float)DisplayManager.WIDTH / (float)DisplayManager.HEIGHT;
 		Loader loader = new Loader();
 		
+
+		// Text
+		TextMaster.init(loader);
+		FontType font = new FontType(loader.loadTexture("arial"), new File("res/arial.fnt"));
 		
 		// ********Terrain Texture Stuff *********
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
@@ -76,6 +89,14 @@ public class MainGameLoop {
 		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 		// ***************************************
+		
+		ModelData palletData = OBJFileLoader.loadOBJ("house");
+		RawModel palletModel = loader.loadToVAO(palletData.getVertices(),
+				palletData.getTextureCoords(),
+				palletData.getNormals(),
+				palletData.getIndices());
+		TexturedModel pallet = new TexturedModel(palletModel,
+				new ModelTexture(loader.loadTexture("house")));
 		
 		ModelData treeData = OBJFileLoader.loadOBJ("tree");
 		
@@ -156,6 +177,7 @@ public class MainGameLoop {
 		TexturedModel bunny = new TexturedModel(bunnyModel,
 				new ModelTexture(loader.loadTexture("playerTexture")));
 		
+
 		ModelData palmData = OBJFileLoader.loadOBJ("fire");
 		RawModel palmModel = loader.loadToVAO(palmData.getVertices(), 
 				palmData.getTextureCoords(), 
@@ -166,65 +188,35 @@ public class MainGameLoop {
 		
 		
 		
-		Player player = new Player(bunny, new Vector3f(800, 0 , -800), 0 ,0, 0, 1);
+		Player player = new Player(bunny, new Vector3f(800, 0 , 800), 0 ,0, 0, 1);
+
 		List<Terrain>terrains = new ArrayList<Terrain>();
-		Terrain terrain = new Terrain(0,-1,loader, texturePack, blendMap, "heightmap");
+		Terrain terrain = new Terrain(0,0,loader, texturePack, blendMap, "heightmap");
 		terrains.add(terrain);
 		
 		
 		List<Entity> entities = new ArrayList<Entity>();
 		Random random = new Random();
 		for (int i = 0; i< 500; i++) {
-/*			if(i % 10 == 0){
-				float x = random.nextFloat() *500 + 450;
-				float z = random.nextFloat() *-500 - 450;
-				float y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(fern, 
-						new Vector3f(x, y, z),
-						0, random.nextFloat() * 360, 0, 0.9f,fernType));
-			}
-			if (i%3 == 0){
-				float x = random.nextFloat() *500 + 450;
-				float z = random.nextFloat() *-500 - 450;
-				float y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(palm,
-						new Vector3f(x,y,z),
-						0, 0, 0, 1f, flowerType));
-				
-			}*/
-/*			if (i%2 == 0)*/{
-				float x = random.nextFloat() *500 + 450;
-				float z = random.nextFloat() *-500 - 450;
+
+				float x = random.nextFloat() *800;
+				float z = random.nextFloat() *800;
 				float y = terrain.getHeightOfTerrain(x, z);
 				entities.add(new Entity(tree,
 						new Vector3f(x,y,z),
-						0, 0, 0, 10, treeType));				
-}	
-/*			if (i%18 == 0)*/{
-				float x = random.nextFloat() *500 + 450;
-				float z = random.nextFloat() *-500 - 450;
-				float y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(lowPolyTree,
-						new Vector3f(x, y, z),
-						0, 0, 0, 1f, lowtreeType) );
-				
-			}
-			entities.add(player);
-/*			entities.add(new Entity(tree,
-					new Vector3f(random.nextFloat() * 800 - 400, 0 , random.nextFloat() *- 600),
-					0, 0, 0, 3));
-			entities.add(new Entity(grass,
-					new Vector3f(random.nextFloat()* 800 - 400, 0, random.nextFloat() *-600),
-					0, 0, 0, 1));
-
-			entities.add(new Entity(lowPolyTree,
-					new Vector3f(random.nextFloat() * 800 - 400, 0 , random.nextFloat() *- 600),
-					0, 0, 0, 0.5f));*/
-			
+						0, 0, 0, 7f, treeType));
+				for (int p=(int)x -5 ; p<=(int)x +5; p++) 
+					for (int q=(int)z -5; q<=(int)z+5; q++) {
+						if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
+							continue;
+						detectMap[p][q] = true;
+					}
 		}
+		entities.add(player);
+			
 		
 		List<Light> lights = new ArrayList<Light>();
-		Light sun = new Light( new Vector3f(400, 1000, -400), new Vector3f(1f, 1f, 1f));
+		Light sun = new Light( new Vector3f(800, 1000, 800), new Vector3f(1f, 1f, 1f));
 		lights.add(new Light(new Vector3f(165, 10, -293), new Vector3f(2, 0, 0), new Vector3f(1f, 0.01f, 0.02f)));
 		lights.add(new Light(new Vector3f(370, 17, -300), new Vector3f(0, 2, 2), new Vector3f(1f, 0.01f, 0.02f)));
 		lights.add(sun);
@@ -235,7 +227,9 @@ public class MainGameLoop {
 		Camera camera =new Camera(player);
 		
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();
-		GuiTexture gui = new GuiTexture(loader.loadTexture("socuwan"),new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
+		
+		GuiTexture gui = new GuiTexture(loader.loadTexture("fireplace"),new Vector2f(-0.9f, 0.8f), new Vector2f(0.08f, 0.08f*UIratio));
+		
 		guis.add(gui);
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		
@@ -254,12 +248,19 @@ public class MainGameLoop {
 		Light light = new Light(new Vector3f(200, 7, -305), new Vector3f(0, 2, 2), new Vector3f(1f, 0.01f, 0.02f));
 		lights.add(light);
 		
+
 		entities.add(new Entity(palm,
 				new Vector3f(100, 250 , -50),
 				0, 0, 0, 1f, flowerType));
 			
-		EntityDetect entityDetect = new EntityDetect();
+
+		List<GUIText> packText = new ArrayList<GUIText>();
+
 		Count count = new Count();
+		EntityDetect entityDetect = new EntityDetect(font, count, packText);
+		
+		GUIControl uiManager = new GUIControl(count, guis, loader, packText, font);
+		
 		
 		//TrueTypeFont font;
 		//Font awtFont = new Font("Times New Roman", Font.BOLD, 24);
@@ -272,22 +273,24 @@ public class MainGameLoop {
 		WaterShader waterShader = new WaterShader();
 		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), buffers);
 		List<WaterTile> waters = new ArrayList<WaterTile>();
-		WaterTile water = new WaterTile(-500, 250, -20);
+		WaterTile water = new WaterTile(-500, 250, 0);
 		waters.add(water);
 		
+
 		ParticleSystem system  = new ParticleSystem(50, 25, 0.3f, 4, 1);
 		system.randomizeRotation();
 		system.setDirection(new Vector3f(0, 1, 0), 0.1f);
 		system.setLifeError(0.1f);
 		system.setSpeedError(0.4f);
 		system.setScaleError(0.8f);
+
 		
 		//******************************Gameloop  Begin*********************
 		
 		while(!Display.isCloseRequested()){
 			
 			camera.move();
-			player.move(terrain);
+			player.move(terrain, entities);
 			picker.update();
 			
 			system.generateParticles(player.getPosition());
@@ -297,10 +300,7 @@ public class MainGameLoop {
 			
 			//click the tree 
 			if(terrainPoint != null){
-
-				entityDetect.isEntity(terrainPoint, entities, player.getPosition(), count, lights);
-
-				
+				entityDetect.isEntity(terrainPoint, entities, player.getPosition());
 			}
 			
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
@@ -326,10 +326,25 @@ public class MainGameLoop {
 			ParticleMaster.renderParticles(camera);
 			
 			guiRenderer.render(guis); 
+			
+			if (entityDetect.getTextStatus()) {
+				textTime += 1;
+				if (textTime == 100) {
+					entityDetect.textShutDown();
+				}
+				System.out.println(textTime);
+			}
+			
+			
+			uiManager.check();
+			uiManager.checkUIClick();
+			TextMaster.render();
+			
 			DisplayManager.updateDisplay();
 			
 		}
 		ParticleMaster.cleanUp();
+		TextMaster.cleanUp(); 
 		buffers.cleanUp();
 		waterShader.cleanUp();
 		guiRenderer.cleanup();

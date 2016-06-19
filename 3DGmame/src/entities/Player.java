@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.List;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -27,7 +29,7 @@ public class Player extends Entity {
 		super(model, position, rotX, rotY, rotZ, scale, 6);
 	}
 	
-	public void move(Terrain terrain) {
+	public void move(Terrain terrain, List<Entity> entities) {
 		checkInputs();
 		
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
@@ -53,17 +55,17 @@ public class Player extends Entity {
 	}
 	
 	private void checkInputs() {
-		if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			this.currentSpeed = RUN_SPEED;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
 			this.currentSpeed = -RUN_SPEED;
 		} else {
 			this.currentSpeed = 0;
 		}
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			this.currentTurnSpeed = -TURN_SPEED;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_V)) {
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
 			this.currentTurnSpeed = TURN_SPEED;
 		} else {
 			this.currentTurnSpeed = 0;

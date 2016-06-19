@@ -14,7 +14,7 @@ import sun.util.resources.cldr.bem.CurrencyNames_bem;
 
 public class SkyboxRenderer {
 
-private static final float SIZE = 500f;
+private static final float SIZE = 3000f;
 	
 	private static final float[] VERTICES = {        
 	    -SIZE,  SIZE, -SIZE,
