@@ -38,6 +38,7 @@ import objConverter.OBJFileLoader;
 import particles.Particle;
 import particles.ParticleMaster;
 import particles.ParticleSystem;
+import particles.ParticleTexture;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -322,13 +323,14 @@ public class MainGameLoop {
 		WaterTile water = new WaterTile(-500, 250, 0);
 		waters.add(water);
 		
+		ParticleTexture particleTexture = new ParticleTexture(loader.loadTexture("fire2"), 1);
 
-		ParticleSystem system  = new ParticleSystem(50, 25, 0.3f, 4, 1);
+		ParticleSystem system  = new ParticleSystem(particleTexture, 40, 8, 0.1f, 4, 2);
 		system.randomizeRotation();
-		system.setDirection(new Vector3f(0, 1, 0), 0.1f);
-		system.setLifeError(0.1f);
+		system.setDirection(new Vector3f(0, 1, 0), 0.05f);
+		system.setLifeError(0.05f);
 		system.setSpeedError(0.4f);
-		system.setScaleError(0.8f);
+		system.setScaleError(3.0f);
 
 		
 		//******************************Gameloop  Begin*********************
@@ -341,7 +343,7 @@ public class MainGameLoop {
 			
 			//system.generateParticles(player.getPosition());
 			
-			ParticleMaster.update();
+			ParticleMaster.update(camera);
 			Vector3f terrainPoint = picker.getCurrentTerrainPoint();
 			
 			//click the tree 
