@@ -143,6 +143,10 @@ public class Entity {
 		this.entityType = entityType;
 	}
 	
+	public void setTexturedModel(TexturedModel model) {
+		this.model = model;
+	}
+	
 
 	
 	

@@ -137,6 +137,16 @@ public class MainGameLoop {
 				new ModelTexture(loader.loadTexture("fernTexture")));
 		fern.getTexture().setHasTransparency(true);
 		
+		
+		ModelData houseData = OBJFileLoader.loadOBJ("whouse");
+		RawModel houseModel = loader.loadToVAO(houseData.getVertices(), 
+				houseData.getTextureCoords(), 
+				houseData.getNormals(),
+				houseData.getIndices());
+		TexturedModel house = new TexturedModel(houseModel,
+				new ModelTexture(loader.loadTexture("whouse")));
+		house.getTexture().setHasTransparency(true);
+		
 		ModelData lampData = OBJFileLoader.loadOBJ("lamp");
 		RawModel lampModel = loader.loadToVAO(lampData.getVertices(), 
 				lampData.getTextureCoords(), 
@@ -177,6 +187,14 @@ public class MainGameLoop {
 		TexturedModel bunny = new TexturedModel(bunnyModel,
 				new ModelTexture(loader.loadTexture("playerTexture")));
 		
+		ModelData princeData = OBJFileLoader.loadOBJ("small_prince");
+		RawModel princeModel = loader.loadToVAO(princeData.getVertices(), 
+				princeData.getTextureCoords(), 
+				princeData.getNormals(),
+				princeData.getIndices());
+		TexturedModel prince = new TexturedModel(princeModel,
+				new ModelTexture(loader.loadTexture("prince")));
+		
 
 		ModelData palmData = OBJFileLoader.loadOBJ("fire");
 		RawModel palmModel = loader.loadToVAO(palmData.getVertices(), 
@@ -186,10 +204,10 @@ public class MainGameLoop {
 		TexturedModel palm = new TexturedModel(palmModel,
 				new ModelTexture(loader.loadTexture("fire")));
 		
-		
-		
-		Player player = new Player(bunny, new Vector3f(800, 0 , 800), 0 ,0, 0, 1);
-
+		Player player;
+		Player player1 = new Player(prince, new Vector3f(800, 0, 800), 0f, 0f, 0f ,0.2f);
+		Player player2 = new Player(bunny, new Vector3f(800, 0 , 800), 0 ,0, 0, 1);
+		player = player1;
 		List<Terrain>terrains = new ArrayList<Terrain>();
 		Terrain terrain = new Terrain(0,0,loader, texturePack, blendMap, "heightmap");
 		terrains.add(terrain);
@@ -197,12 +215,12 @@ public class MainGameLoop {
 		
 		List<Entity> entities = new ArrayList<Entity>();
 		Random random = new Random();
-		for (int i = 0; i< 500; i++) {
+		for (int i = 0; i< 5; i++) {
 
 				float x = random.nextFloat() *800;
 				float z = random.nextFloat() *800;
 				float y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(tree,
+				entities.add(new Entity(house,
 						new Vector3f(x,y,z),
 						0, 0, 0, 7f, treeType));
 				for (int p=(int)x -5 ; p<=(int)x +5; p++) 
@@ -226,15 +244,43 @@ public class MainGameLoop {
 		
 		Camera camera =new Camera(player);
 		
+		// ************************* GUI ********************************************
+		
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();
 		
-		GuiTexture gui = new GuiTexture(loader.loadTexture("fireplace"),new Vector2f(-0.9f, 0.8f), new Vector2f(0.08f, 0.08f*UIratio));
+		float gui_dis = 0.165f;
+		float z_base = 0.91f;
+		float x_base = -0.95f;
+		float gui_scale = 0.04f;
 		
-		guis.add(gui);
+		GuiTexture guitorch = new GuiTexture(loader.loadTexture("torch"),new Vector2f(x_base, z_base), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guitorch);
+		GuiTexture guiwood = new GuiTexture(loader.loadTexture("pine-tree"),new Vector2f(x_base, z_base - gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guiwood);
+		GuiTexture guiheartbeat = new GuiTexture(loader.loadTexture("heart-beats"),new Vector2f(x_base, z_base - 2*gui_dis), new Vector2f(gui_scale,gui_scale*UIratio));
+		guis.add(guiheartbeat);
+		GuiTexture guimeat = new GuiTexture(loader.loadTexture("meat"),new Vector2f(x_base, z_base - 3*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guimeat);
+		GuiTexture guistone = new GuiTexture(loader.loadTexture("stone-block"),new Vector2f(x_base, z_base - 4*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guistone);
+		GuiTexture mineral = new GuiTexture(loader.loadTexture("minerals"),new Vector2f(x_base, z_base - 5*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(mineral);
+		GuiTexture guispade = new GuiTexture(loader.loadTexture("sword-spade"),new Vector2f(x_base, z_base - 6*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guispade);
+		GuiTexture guiflame = new GuiTexture(loader.loadTexture("flame"),new Vector2f(x_base, z_base - 7*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guiflame);
+		GuiTexture guicampfire = new GuiTexture(loader.loadTexture("campfire"),new Vector2f(x_base, z_base - 8*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guicampfire);
+		GuiTexture guihouse = new GuiTexture(loader.loadTexture("church"),new Vector2f(x_base, z_base - 9*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guihouse);
+		GuiTexture guiboot = new GuiTexture(loader.loadTexture("leather-boot"),new Vector2f(x_base, z_base - 10*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guiboot);
+		GuiTexture guiboat = new GuiTexture(loader.loadTexture("sailboat"),new Vector2f(x_base, z_base - 11*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guiboat);
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		
 		
-		
+		// ************************** GUI ***********************************************
 		//Terrain terrain2 = new Terrain(0, 2,loader, texturePack, blendMap, "heightmap");
 		
 		MasterRenderer renderer = new MasterRenderer(loader);
@@ -293,7 +339,7 @@ public class MainGameLoop {
 			player.move(terrain, entities);
 			picker.update();
 			
-			system.generateParticles(player.getPosition());
+			//system.generateParticles(player.getPosition());
 			
 			ParticleMaster.update();
 			Vector3f terrainPoint = picker.getCurrentTerrainPoint();
@@ -331,6 +377,7 @@ public class MainGameLoop {
 				textTime += 1;
 				if (textTime == 100) {
 					entityDetect.textShutDown();
+					player.setTexturedModel(bunny);
 				}
 				System.out.println(textTime);
 			}

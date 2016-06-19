@@ -24,7 +24,7 @@ public class EntityDetect {
 	public static final int lampType =  5;
 	public static final int playerType = 6;
 	
-	public static final int totType = 6;
+	public static final int totType = 12;
 	private FontType font;
 	
 	private GUIText text;
@@ -34,18 +34,28 @@ public class EntityDetect {
 	private Count count;
 	private List<GUIText> packText;
 	
+	float gui_dis = 0.0825f;
+	float z_base = 0.054f;
+	float x_base = 0.029f;
+	float gui_scale = 1f;
+	
+	float r = 0f; 
+	float g = 0f;
+	float b = 0f;
 	
 	public EntityDetect(FontType font, Count count, List<GUIText> packText) {
 		this.font = font;
 		this.count = count;
 		this.packText = packText;
+		
 		for (int i = 0; i< totType; i++) {
-			Vector2f pos = new Vector2f(0.1f  ,0.05f + (0.1f*(float)i));
+			Vector2f pos = new Vector2f(x_base  ,z_base + (gui_dis*(float)i));
 			System.out.println(pos.x + " " + pos.y);
-			GUIText pack = new GUIText("0" ,3, font, pos , 1.5f, false);
-			pack.setColour(1, 1, 1);
+			GUIText pack = new GUIText("00" , gui_scale, font, pos , 1.5f, false);
+			pack.setColour(r ,g, b);
 			this.packText.add(pack);
 		}
+		
 	}
 	
 
@@ -86,11 +96,14 @@ public class EntityDetect {
 	private void increase(int type){
 		packText.get(type-1).remove();
 		count.setCount(type);
-		Vector2f pos = new Vector2f(0.1f  ,0.05f + (0.1f*(float)(type-1)));
-		String num = count.getCount(type)+"";
-		System.out.println(num);
-		GUIText inc = new GUIText(num ,3, font, pos , 1.5f, false);
-		inc.setColour(1, 1, 1);
+		Vector2f pos = new Vector2f(x_base  ,z_base + (gui_dis*(float)(type-1))); 
+		long num = count.getCount(type);
+		String snum;
+		if (num < 10) snum = "0" + num;
+		else snum = num + "";
+		
+		GUIText inc = new GUIText(snum ,gui_scale, font, pos , 1.5f, false);
+		inc.setColour(r, g, b);
 		packText.set(type-1, inc);
 	}
 	
@@ -103,8 +116,8 @@ public class EntityDetect {
 	}
 	
 	private boolean playerIsNearEntity(Vector3f positionPlayer, Vector3f positionEntity){
-		if (positionPlayer.x < (positionEntity.x + 30) && positionPlayer.x > (positionEntity.x - 30)  
-				&& positionPlayer.z < (positionEntity.z + 30) && positionPlayer.z > (positionEntity.z -30) ) {
+		if (positionPlayer.x < (positionEntity.x + 15) && positionPlayer.x > (positionEntity.x - 15)  
+				&& positionPlayer.z < (positionEntity.z + 15) && positionPlayer.z > (positionEntity.z -15) ) {
 			return true;
 		}
 		return false;
