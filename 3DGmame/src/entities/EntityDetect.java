@@ -15,14 +15,7 @@ import terrains.Terrain;
 
 
 public class EntityDetect {
-	
-	private float x,y;
-    public static final int treeType=1;
-	public static final int flowerType = 2;
-	public static final int fernType = 3;
-	public static final int lowtreeType = 4;
-	public static final int lampType =  5;
-	public static final int playerType = 6;
+
 	
 	public static final int totType = 12;
 	private FontType font;
@@ -50,7 +43,7 @@ public class EntityDetect {
 		
 		for (int i = 0; i< totType; i++) {
 			Vector2f pos = new Vector2f(x_base  ,z_base + (gui_dis*(float)i));
-			System.out.println(pos.x + " " + pos.y);
+			//System.out.println(pos.x + " " + pos.y);
 			GUIText pack = new GUIText("00" , gui_scale, font, pos , 1.5f, false);
 			pack.setColour(r ,g, b);
 			this.packText.add(pack);
@@ -65,7 +58,7 @@ public class EntityDetect {
 				if (playerIsNearEntity(positionPlayer, entity.getPosition()) && 
 						mouseIsNearEntity(position, entity.getPosition())) {
 					int type = entity.getEntityType();
-					if (type == playerType){
+					if (type == Entity.playerType || type == Entity.palletType || type == Entity.houseType || type == Entity.fireplaceType){
 						entity.setValid(true);
 					}else {
 						entity.setValid(false);
@@ -82,7 +75,7 @@ public class EntityDetect {
 							textPopUp();
 							
 							increase(type);
-							System.out.println(getTypeName(type) + "  :  " + count.getCount(type));
+							//System.out.println(getTypeName(type) + "  :  " + count.getCount(type));
 						}
 						
 					}
@@ -94,9 +87,9 @@ public class EntityDetect {
 	
 	
 	private void increase(int type){
-		packText.get(type-1).remove();
+		packText.get(type).remove();
 		count.setCount(type);
-		Vector2f pos = new Vector2f(x_base  ,z_base + (gui_dis*(float)(type-1))); 
+		Vector2f pos = new Vector2f(x_base  ,z_base + (gui_dis*(float)(type))); 
 		long num = count.getCount(type);
 		String snum;
 		if (num < 10) snum = "0" + num;
@@ -104,7 +97,7 @@ public class EntityDetect {
 		
 		GUIText inc = new GUIText(snum ,gui_scale, font, pos , 1.5f, false);
 		inc.setColour(r, g, b);
-		packText.set(type-1, inc);
+		packText.set(type, inc);
 	}
 	
 	private boolean mouseIsNearEntity(Vector3f positionMouse,  Vector3f positionEntity) {
@@ -125,13 +118,13 @@ public class EntityDetect {
 	
 	private String getTypeName(int type){
 		switch (type) {
-		case treeType:
+		case Entity.treeType:
 			return "treeType";
-		case fernType:
+		case Entity.fernType:
 			return "fernType";
-		case flowerType:
+		case Entity.flowerType:
 			return "flowerType";
-		case lowtreeType:
+		case Entity.lowtreeType:
 			return "lowtreeType";
 		default:
 			return "UndefinedType";

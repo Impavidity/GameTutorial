@@ -1,5 +1,6 @@
 package skybox;
 
+import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -94,7 +95,7 @@ private static final float SIZE = 3000f;
 	}
 	
 	private void bindTextures(){
-		time += DisplayManager.getFrameTimeSeconds() * 1000;
+		time += DisplayManager.getFrameTimeSeconds() * 100;
 		time %= 24000;
 		int texture1;
 		int texture2;
@@ -124,7 +125,18 @@ private static final float SIZE = 3000f;
 		shader.loadBlendFactor(blendFactor);
 	}
 	
+	public float getLightness(){
+			float lightness;
+			System.out.println(time);
+			if (time >0 && time < 12000){
+				lightness = 2.0f/(time/1000);
+			}
+			else{
+				lightness = 4.0f - 4.0f/(time/1000);
+			}
+			return (float) (2000.0/time);
+		}
+	}
 	
 	
-	
-}
+

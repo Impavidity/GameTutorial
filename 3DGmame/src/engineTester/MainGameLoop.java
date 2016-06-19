@@ -5,8 +5,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.PrimitiveIterator.OfDouble;
 
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -17,7 +20,10 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 import org.omg.CORBA.PUBLIC_MEMBER;
 
+import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
+import com.sun.javafx.webkit.theme.Renderer;
 import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
+import com.sun.xml.internal.ws.client.sei.ResponseBuilder.RpcLit;
 
 import entities.Camera;
 import entities.Count;
@@ -56,12 +62,9 @@ import water.WaterTile;
 
 public class MainGameLoop {
 
-    public static final int treeType=1;
-	public static final int flowerType = 2;
-	public static final int fernType = 3;
-	public static final int lowtreeType = 4;
-	public static final int lampType =  5;
-	public static final int playerType = 6;
+
+	
+	public static List<TexturedModel> texturedModels = new ArrayList<TexturedModel>();
 	
 	public static int textTime = 0;
 	
@@ -98,76 +101,16 @@ public class MainGameLoop {
 				palletData.getIndices());
 		TexturedModel pallet = new TexturedModel(palletModel,
 				new ModelTexture(loader.loadTexture("house")));
+		texturedModels.add(pallet);
 		
-		ModelData treeData = OBJFileLoader.loadOBJ("tree");
-		
+		ModelData treeData = OBJFileLoader.loadOBJ("tree");		
 		RawModel treeModel = loader.loadToVAO(treeData.getVertices(), 
 				treeData.getTextureCoords(), 
 				treeData.getNormals(), 
 				treeData.getIndices());
-		
-		//TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("tree", loader), 
-		//		new ModelTexture(loader.loadTexture("tree")));
 		TexturedModel tree = new TexturedModel(treeModel, 
 						new ModelTexture(loader.loadTexture("tree")));
-		
-		ModelData grassData = OBJFileLoader.loadOBJ("grassModel");
-		RawModel grassModel = loader.loadToVAO(grassData.getVertices(), 
-				grassData.getTextureCoords(), 
-				grassData.getNormals(),
-				grassData.getIndices());
-		TexturedModel grass = new TexturedModel(grassModel,
-				new ModelTexture(loader.loadTexture("grassTexture")));
-		
-		//TexturedModel grass = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader),
-		//		new ModelTexture(loader.loadTexture("grassTexture")));
-		
-		grass.getTexture().setHasTransparency(true);
-		grass.getTexture().setUseFakeLighting(true);
-		
-		//TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
-		//		new ModelTexture(loader.loadTexture("fern")));
-		
-		
-		ModelData fernData = OBJFileLoader.loadOBJ("fern");
-		RawModel fernModel = loader.loadToVAO(fernData.getVertices(), 
-				fernData.getTextureCoords(), 
-				fernData.getNormals(),
-				fernData.getIndices());
-		TexturedModel fern = new TexturedModel(fernModel,
-				new ModelTexture(loader.loadTexture("fernTexture")));
-		fern.getTexture().setHasTransparency(true);
-		
-		
-		ModelData houseData = OBJFileLoader.loadOBJ("whouse");
-		RawModel houseModel = loader.loadToVAO(houseData.getVertices(), 
-				houseData.getTextureCoords(), 
-				houseData.getNormals(),
-				houseData.getIndices());
-		TexturedModel house = new TexturedModel(houseModel,
-				new ModelTexture(loader.loadTexture("whouse")));
-		house.getTexture().setHasTransparency(true);
-		
-		ModelData lampData = OBJFileLoader.loadOBJ("lamp");
-		RawModel lampModel = loader.loadToVAO(lampData.getVertices(), 
-				lampData.getTextureCoords(), 
-				lampData.getNormals(),
-				lampData.getIndices());
-		TexturedModel lamp = new TexturedModel(lampModel,
-				new ModelTexture(loader.loadTexture("lamp")));
-		lamp.getTexture().setHasTransparency(true);
-		
-		//texture.setShineDamper(10);
-		//texture.setRelectivity(1);
-		
-		
-		ModelData lowPolyTreeData = OBJFileLoader.loadOBJ("lowPolyTree");
-		RawModel lowPolyTreeModel = loader.loadToVAO(lowPolyTreeData.getVertices(), 
-				lowPolyTreeData.getTextureCoords(), 
-				lowPolyTreeData.getNormals(),
-				lowPolyTreeData.getIndices());
-		TexturedModel lowPolyTree = new TexturedModel(lowPolyTreeModel,
-				new ModelTexture(loader.loadTexture("lowPolyTree")));
+		texturedModels.add(tree);
 		
 		
 		ModelData flowerData = OBJFileLoader.loadOBJ("grassModel");
@@ -179,6 +122,37 @@ public class MainGameLoop {
 				new ModelTexture(loader.loadTexture("flower")));
 		flower.getTexture().setHasTransparency(true);
 		flower.getTexture().setUseFakeLighting(true);
+		texturedModels.add(flower);
+		
+		
+		ModelData fernData = OBJFileLoader.loadOBJ("fern");
+		RawModel fernModel = loader.loadToVAO(fernData.getVertices(), 
+				fernData.getTextureCoords(), 
+				fernData.getNormals(),
+				fernData.getIndices());
+		TexturedModel fern = new TexturedModel(fernModel,
+				new ModelTexture(loader.loadTexture("fernTexture")));
+		fern.getTexture().setHasTransparency(true);
+		texturedModels.add(fern);
+		
+		ModelData lowPolyTreeData = OBJFileLoader.loadOBJ("lowPolyTree");
+		RawModel lowPolyTreeModel = loader.loadToVAO(lowPolyTreeData.getVertices(), 
+				lowPolyTreeData.getTextureCoords(), 
+				lowPolyTreeData.getNormals(),
+				lowPolyTreeData.getIndices());
+		TexturedModel lowPolyTree = new TexturedModel(lowPolyTreeModel,
+				new ModelTexture(loader.loadTexture("lowPolyTree")));
+		texturedModels.add(lowPolyTree);
+		
+		ModelData lampData = OBJFileLoader.loadOBJ("lamp");
+		RawModel lampModel = loader.loadToVAO(lampData.getVertices(), 
+				lampData.getTextureCoords(), 
+				lampData.getNormals(),
+				lampData.getIndices());
+		TexturedModel lamp = new TexturedModel(lampModel,
+				new ModelTexture(loader.loadTexture("lamp")));
+		lamp.getTexture().setHasTransparency(true);
+		texturedModels.add(lamp);
 		
 		ModelData bunnyData = OBJFileLoader.loadOBJ("person");
 		RawModel bunnyModel = loader.loadToVAO(bunnyData.getVertices(), 
@@ -187,6 +161,37 @@ public class MainGameLoop {
 				bunnyData.getIndices());
 		TexturedModel bunny = new TexturedModel(bunnyModel,
 				new ModelTexture(loader.loadTexture("playerTexture")));
+		texturedModels.add(bunny);
+		
+		ModelData fireplaceData = OBJFileLoader.loadOBJ("fire");
+		RawModel fireplaceModel = loader.loadToVAO(fireplaceData.getVertices(), 
+				fireplaceData.getTextureCoords(), 
+				fireplaceData.getNormals(),
+				fireplaceData.getIndices());
+		TexturedModel fireplace = new TexturedModel(fireplaceModel,
+				new ModelTexture(loader.loadTexture("fireplace")));
+		texturedModels.add(fireplace);
+		
+		ModelData grassData = OBJFileLoader.loadOBJ("grassModel");
+		RawModel grassModel = loader.loadToVAO(grassData.getVertices(), 
+				grassData.getTextureCoords(), 
+				grassData.getNormals(),
+				grassData.getIndices());
+		TexturedModel grass = new TexturedModel(grassModel,
+				new ModelTexture(loader.loadTexture("grassTexture")));
+		grass.getTexture().setHasTransparency(true);
+		grass.getTexture().setUseFakeLighting(true);
+		texturedModels.add(grass);
+
+		ModelData houseData = OBJFileLoader.loadOBJ("whouse");
+		RawModel houseModel = loader.loadToVAO(houseData.getVertices(), 
+				houseData.getTextureCoords(), 
+				houseData.getNormals(),
+				houseData.getIndices());
+		TexturedModel house = new TexturedModel(houseModel,
+				new ModelTexture(loader.loadTexture("whouse")));
+		house.getTexture().setHasTransparency(true);
+		texturedModels.add(house);
 		
 		ModelData princeData = OBJFileLoader.loadOBJ("small_prince");
 		RawModel princeModel = loader.loadToVAO(princeData.getVertices(), 
@@ -196,14 +201,16 @@ public class MainGameLoop {
 		TexturedModel prince = new TexturedModel(princeModel,
 				new ModelTexture(loader.loadTexture("prince")));
 		
+		ModelData rockData = OBJFileLoader.loadOBJ("boulder");
+		RawModel rockModel = loader.loadToVAO(rockData.getVertices(), 
+				rockData.getTextureCoords(), 
+				rockData.getNormals(),
+				rockData.getIndices());
+		TexturedModel rock = new TexturedModel(rockModel,
+				new ModelTexture(loader.loadTexture("white")));
+		
 
-		ModelData palmData = OBJFileLoader.loadOBJ("fire");
-		RawModel palmModel = loader.loadToVAO(palmData.getVertices(), 
-				palmData.getTextureCoords(), 
-				palmData.getNormals(),
-				palmData.getIndices());
-		TexturedModel palm = new TexturedModel(palmModel,
-				new ModelTexture(loader.loadTexture("fire")));
+
 		
 		Player player;
 		Player player1 = new Player(prince, new Vector3f(800, 0, 800), 0f, 0f, 0f ,0.2f);
@@ -221,9 +228,9 @@ public class MainGameLoop {
 				float x = random.nextFloat() *800;
 				float z = random.nextFloat() *800;
 				float y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(house,
+				entities.add(new Entity(rock,
 						new Vector3f(x,y,z),
-						0, 0, 0, 7f, treeType));
+						0, 0, 0, 0.5f, Entity.treeType));
 				for (int p=(int)x -5 ; p<=(int)x +5; p++) 
 					for (int q=(int)z -5; q<=(int)z+5; q++) {
 						if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
@@ -232,15 +239,13 @@ public class MainGameLoop {
 					}
 		}
 		entities.add(player);
-			
+		MasterRenderer renderer = new MasterRenderer(loader);
 		
 		List<Light> lights = new ArrayList<Light>();
-		Light sun = new Light( new Vector3f(800, 1000, 800), new Vector3f(1f, 1f, 1f));
+		float lightness;		
 		lights.add(new Light(new Vector3f(165, 10, -293), new Vector3f(2, 0, 0), new Vector3f(1f, 0.01f, 0.02f)));
-		lights.add(new Light(new Vector3f(370, 17, -300), new Vector3f(0, 2, 2), new Vector3f(1f, 0.01f, 0.02f)));
-		lights.add(sun);
-		
-		entities.add(new Entity(lamp, new Vector3f(165,terrain.getHeightOfTerrain(165, -293),-293),	0, 0, 0, 1f, lampType));
+		lights.add(new Light(new Vector3f(370, 17, -300), new Vector3f(0, 2, 2), new Vector3f(1f, 0.01f, 0.02f)));		
+		entities.add(new Entity(lamp, new Vector3f(165,terrain.getHeightOfTerrain(165, -293),-293),	0, 0, 0, 1f, Entity.lampType));
 		
 		
 		Camera camera =new Camera(player);
@@ -284,21 +289,16 @@ public class MainGameLoop {
 		// ************************** GUI ***********************************************
 		//Terrain terrain2 = new Terrain(0, 2,loader, texturePack, blendMap, "heightmap");
 		
-		MasterRenderer renderer = new MasterRenderer(loader);
+
 		ParticleMaster.init(loader, renderer.getProjectionMatrix());
 		
 		MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
 		
 		Entity lampEntity = new Entity(lamp, new Vector3f(293, -6.8f, -305)
-				, 0, 0, 0, 1, lampType);
+				, 0, 0, 0, 1, Entity.lampType);
 		entities.add(lampEntity);
 		Light light = new Light(new Vector3f(200, 7, -305), new Vector3f(0, 2, 2), new Vector3f(1f, 0.01f, 0.02f));
 		lights.add(light);
-		
-
-		entities.add(new Entity(palm,
-				new Vector3f(100, 250 , -50),
-				0, 0, 0, 1f, flowerType));
 			
 
 		List<GUIText> packText = new ArrayList<GUIText>();
@@ -323,20 +323,26 @@ public class MainGameLoop {
 		WaterTile water = new WaterTile(-500, 250, 0);
 		waters.add(water);
 		
+		List<ParticleSystem> systems = new ArrayList<ParticleSystem>();
+		List<Vector3f> sysPos = new ArrayList<Vector3f>();
 		ParticleTexture particleTexture = new ParticleTexture(loader.loadTexture("fire2"), 1);
 
-		ParticleSystem system  = new ParticleSystem(particleTexture, 40, 8, 0.1f, 4, 2);
-		system.randomizeRotation();
-		system.setDirection(new Vector3f(0, 1, 0), 0.05f);
-		system.setLifeError(0.05f);
-		system.setSpeedError(0.4f);
-		system.setScaleError(3.0f);
+
 
 		
 		//******************************Gameloop  Begin*********************
 		
+		//lightness = renderer.getLightness();
+		lightness = 1.0f;
+		Light sun = new Light( new Vector3f(800, 1000, 800), new Vector3f(lightness, lightness, lightness));
+		Entity entityClick = null;
+		ParticleSystem system = null;
+		boolean entityClickFlag = false;
+		lights.add(sun);
+		//
 		while(!Display.isCloseRequested()){
-			
+			lightness = renderer.getLightness();
+			//sun.setColour(new Vector3f(lightness,lightness,lightness));
 			camera.move();
 			player.move(terrain, entities);
 			picker.update();
@@ -358,6 +364,9 @@ public class MainGameLoop {
 			float distance = 2* (camera.getPosition().y - water.getHeight());
 			camera.getPosition().y  -= distance;
 			camera.invertPitch();
+			for (Entity entity : entities) {
+				if (entity == null) System.out.println("There is a null");
+			}
 			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, 1, 0, -water.getHeight()));
 			camera.getPosition().y += distance;
 			camera.invertPitch();
@@ -383,7 +392,54 @@ public class MainGameLoop {
 				}
 				System.out.println(textTime);
 			}
+			/*
+			if(Keyboard.isKeyDown(Keyboard.KEY_F1)){
+				entities.add(new Entity(fireplace, terrainPoint,
+						0, 0, 0, 1f, flowerType));
+			}
+			*/
+			//system.generateParticles(player.getPosition());
+			if (entityClickFlag == false) {
+				entityClick = uiManager.checkKeyWithObject(entities, picker);
+				system = uiManager.checkKeyWithParticle(picker, particleTexture);
+			}
 			
+			if (entityClick != null) {
+				entityClickFlag = true;
+				if (terrainPoint!=null) {
+					entityClick.setPosition(terrainPoint);
+					if (Mouse.isButtonDown(0)) {
+						entityClick = null;
+						entityClickFlag = false;
+					}
+				}
+			}
+			if (system != null ) {
+				entityClickFlag = true;
+				systems.add(system);
+				if (terrainPoint!=null) {
+					system.generateParticles(terrainPoint);
+					if (Mouse.isButtonDown(0)) {
+							sysPos.add(terrainPoint);
+							System.out.println("i am in");
+							System.out.println(sysPos.get(0));
+							system = null;				
+							entityClickFlag = false;
+					}
+				}
+			}
+			int i=0;
+			if(sysPos.size() != 0){
+				for (ParticleSystem system2 : systems){
+					System.out.println(i);
+					if (i>=sysPos.size())
+						break;
+					else{ 
+						system2.generateParticles(sysPos.get(i));
+						i++;
+					}
+				}
+			}
 			
 			uiManager.check();
 			uiManager.checkUIClick();
@@ -403,4 +459,15 @@ public class MainGameLoop {
 
 	}
 
+/*	public void addEntityGoWithMouse(List<Entity> entities, int type){
+		switch ( type) {
+		case : fireplaceType
+			entities.add(new Entity(fireplace, terrainPoint,
+						0, 0, 0, 1f, fireplaceType);
+			break;
+
+		default:
+			break;
+		}
+	}*/
 }

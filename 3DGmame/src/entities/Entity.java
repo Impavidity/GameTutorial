@@ -11,6 +11,18 @@ import models.TexturedModel;
 import terrains.Terrain;
 
 public class Entity {
+	
+	public static final int palletType = 0;
+    public static final int treeType=1;
+	public static final int flowerType = 2;
+	public static final int fernType = 3;
+	public static final int lowtreeType = 4;
+	public static final int lampType =  5;
+	public static final int playerType = 6;
+	public static final int fireplaceType = 7;
+	public static final int grassType = 8;
+	public static final int houseType = 9;
+	
 	private TexturedModel model;
 	private Vector3f position;
 	private float rotX, rotY, rotZ;
