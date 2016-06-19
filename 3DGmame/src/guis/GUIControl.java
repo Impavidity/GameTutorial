@@ -33,22 +33,7 @@ public class GUIControl {
 		this.font = font;
 	}
 	
-	public void check() {
-		if (count.getCount(Entity.flowerType) >= 5) {
-			GuiTexture gui = new GuiTexture(loader.loadTexture("wood"),new Vector2f(-0.7f, 0.8f), new Vector2f(0.08f, 0.08f* MainGameLoop.UIratio));
-			guis.add(gui);
-			count.clearCount(Entity.flowerType);
-			
-			packText.get(Entity.flowerType - 1).remove();
-			Vector2f pos = new Vector2f(0.1f  ,0.05f + (0.1f*(float)(Entity.flowerType - 1)));
-			System.out.println(pos.x + " " + pos.y);
-			GUIText pack = new GUIText("0" ,3, font, pos , 1.5f, false);
-			pack.setColour(1, 1, 1);
-			packText.set(Entity.flowerType- 1, pack);
-			
-		}
-	}
-	
+
 	public void checkUIClick() {
 		if (Mouse.isButtonDown(0)) {
 			//System.out.println(Mouse.getX() +" " + Mouse.getY());
