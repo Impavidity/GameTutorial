@@ -9,6 +9,8 @@ public class Count {
 	public static final int lowtreeType = 4;
 	public static final int lampType =  5;
 	public static final int playerType = 6;
+	public static final int vegetableType = 7;
+	public static final int ironType = 8;
 	
 	long treeCount, fernCount, lowtreeCount, flowerCount;
 

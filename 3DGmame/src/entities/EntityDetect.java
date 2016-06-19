@@ -18,11 +18,11 @@ public class EntityDetect {
 	public static final int playerType = 6;
 	
 	
-	public void isEntity(Vector3f position, List<Entity> entities, Vector3f positionPlayer, Count count) {
+	public void isEntity(Vector3f position, List<Entity> entities, Vector3f positionPlayer, Count count, List<Light> lights) {
 		if (Mouse.isButtonDown(0)) {
 			for (Entity entity : entities) {
 				if (playerIsNearEntity(positionPlayer, entity.getPosition()) && 
-						mouseIsNearEntity(position, entity.getPosition() )) {
+						mouseIsNearEntity(position, entity.getPosition(), lights )) {
 					int type = entity.getEntityType();
 					if (type == playerType){
 						entity.setValid(true);
@@ -40,9 +40,10 @@ public class EntityDetect {
 		}
 	}
 	
-	private boolean mouseIsNearEntity(Vector3f positionMouse,  Vector3f positionEntity) {
+	public boolean mouseIsNearEntity(Vector3f positionMouse,  Vector3f positionEntity, List<Light> lights) {
 		if (positionMouse.x < (positionEntity.x + 10) && positionMouse.x > (positionEntity.x - 10)  
 				&& positionMouse.z < (positionEntity.z + 10) && positionMouse.z > (positionEntity.z -10) ) {
+			lights.add(new Light(new Vector3f(200, 7, -305), new Vector3f(0, 2, 2), new Vector3f(10f, 10f, 10f)));
 			return true;
 		}
 		return false;

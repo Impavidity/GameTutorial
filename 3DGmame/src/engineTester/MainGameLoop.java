@@ -1,10 +1,12 @@
 package engineTester;
 
 import java.awt.Font;
+import java.awt.peer.KeyboardFocusManagerPeer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -29,6 +31,9 @@ import models.RawModel;
 import models.TexturedModel;
 import objConverter.ModelData;
 import objConverter.OBJFileLoader;
+import particles.Particle;
+import particles.ParticleMaster;
+import particles.ParticleSystem;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -60,6 +65,7 @@ public class MainGameLoop {
 		DisplayManager.createDisplay();
 		
 		Loader loader = new Loader();
+		
 		
 		// ********Terrain Texture Stuff *********
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
@@ -150,7 +156,17 @@ public class MainGameLoop {
 		TexturedModel bunny = new TexturedModel(bunnyModel,
 				new ModelTexture(loader.loadTexture("playerTexture")));
 		
-		Player player = new Player(bunny, new Vector3f(100, 250 , -50), 0 ,0, 0, 1);
+		ModelData palmData = OBJFileLoader.loadOBJ("fire");
+		RawModel palmModel = loader.loadToVAO(palmData.getVertices(), 
+				palmData.getTextureCoords(), 
+				palmData.getNormals(),
+				palmData.getIndices());
+		TexturedModel palm = new TexturedModel(palmModel,
+				new ModelTexture(loader.loadTexture("fire")));
+		
+		
+		
+		Player player = new Player(bunny, new Vector3f(800, 0 , -800), 0 ,0, 0, 1);
 		List<Terrain>terrains = new ArrayList<Terrain>();
 		Terrain terrain = new Terrain(0,-1,loader, texturePack, blendMap, "heightmap");
 		terrains.add(terrain);
@@ -159,34 +175,34 @@ public class MainGameLoop {
 		List<Entity> entities = new ArrayList<Entity>();
 		Random random = new Random();
 		for (int i = 0; i< 500; i++) {
-			if(i % 10 == 0){
-				float x = random.nextFloat() *800;
-				float z = random.nextFloat() *-600;
+/*			if(i % 10 == 0){
+				float x = random.nextFloat() *500 + 450;
+				float z = random.nextFloat() *-500 - 450;
 				float y = terrain.getHeightOfTerrain(x, z);
 				entities.add(new Entity(fern, 
 						new Vector3f(x, y, z),
 						0, random.nextFloat() * 360, 0, 0.9f,fernType));
 			}
-			if (i%6 == 0){
-				float x = random.nextFloat() *800;
-				float z = random.nextFloat() *-600;
+			if (i%3 == 0){
+				float x = random.nextFloat() *500 + 450;
+				float z = random.nextFloat() *-500 - 450;
 				float y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(flower,
+				entities.add(new Entity(palm,
 						new Vector3f(x,y,z),
 						0, 0, 0, 1f, flowerType));
 				
-			}
-			if (i%10 == 0){
-				float x = random.nextFloat() *800;
-				float z = random.nextFloat() *-600;
+			}*/
+/*			if (i%2 == 0)*/{
+				float x = random.nextFloat() *500 + 450;
+				float z = random.nextFloat() *-500 - 450;
 				float y = terrain.getHeightOfTerrain(x, z);
 				entities.add(new Entity(tree,
 						new Vector3f(x,y,z),
-						0, 0, 0, 1f, treeType));				
-			}
-			if (i%18 == 0){
-				float x = random.nextFloat() *800;
-				float z = random.nextFloat() *-600;
+						0, 0, 0, 10, treeType));				
+}	
+/*			if (i%18 == 0)*/{
+				float x = random.nextFloat() *500 + 450;
+				float z = random.nextFloat() *-500 - 450;
 				float y = terrain.getHeightOfTerrain(x, z);
 				entities.add(new Entity(lowPolyTree,
 						new Vector3f(x, y, z),
@@ -208,7 +224,7 @@ public class MainGameLoop {
 		}
 		
 		List<Light> lights = new ArrayList<Light>();
-		Light sun = new Light( new Vector3f(400, 1000, -400), new Vector3f(0.2f, 0.2f, 0.2f));
+		Light sun = new Light( new Vector3f(400, 1000, -400), new Vector3f(1f, 1f, 1f));
 		lights.add(new Light(new Vector3f(165, 10, -293), new Vector3f(2, 0, 0), new Vector3f(1f, 0.01f, 0.02f)));
 		lights.add(new Light(new Vector3f(370, 17, -300), new Vector3f(0, 2, 2), new Vector3f(1f, 0.01f, 0.02f)));
 		lights.add(sun);
@@ -228,6 +244,7 @@ public class MainGameLoop {
 		//Terrain terrain2 = new Terrain(0, 2,loader, texturePack, blendMap, "heightmap");
 		
 		MasterRenderer renderer = new MasterRenderer(loader);
+		ParticleMaster.init(loader, renderer.getProjectionMatrix());
 		
 		MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
 		
@@ -236,6 +253,10 @@ public class MainGameLoop {
 		entities.add(lampEntity);
 		Light light = new Light(new Vector3f(200, 7, -305), new Vector3f(0, 2, 2), new Vector3f(1f, 0.01f, 0.02f));
 		lights.add(light);
+		
+		entities.add(new Entity(palm,
+				new Vector3f(100, 250 , -50),
+				0, 0, 0, 1f, flowerType));
 			
 		EntityDetect entityDetect = new EntityDetect();
 		Count count = new Count();
@@ -251,20 +272,35 @@ public class MainGameLoop {
 		WaterShader waterShader = new WaterShader();
 		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), buffers);
 		List<WaterTile> waters = new ArrayList<WaterTile>();
-		WaterTile water = new WaterTile(-500, 250, 0);
+		WaterTile water = new WaterTile(-500, 250, -20);
 		waters.add(water);
 		
+		ParticleSystem system  = new ParticleSystem(50, 25, 0.3f, 4, 1);
+		system.randomizeRotation();
+		system.setDirection(new Vector3f(0, 1, 0), 0.1f);
+		system.setLifeError(0.1f);
+		system.setSpeedError(0.4f);
+		system.setScaleError(0.8f);
+		
 		//******************************Gameloop  Begin*********************
+		
 		while(!Display.isCloseRequested()){
 			
 			camera.move();
 			player.move(terrain);
 			picker.update();
+			
+			system.generateParticles(player.getPosition());
+			
+			ParticleMaster.update();
 			Vector3f terrainPoint = picker.getCurrentTerrainPoint();
 			
 			//click the tree 
 			if(terrainPoint != null){
-				entityDetect.isEntity(terrainPoint, entities, player.getPosition(), count);
+
+				entityDetect.isEntity(terrainPoint, entities, player.getPosition(), count, lights);
+
+				
 			}
 			
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
@@ -286,10 +322,14 @@ public class MainGameLoop {
 			GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, -1, 0, 10000));
 			waterRenderer.render(waters, camera,sun);
+			
+			ParticleMaster.renderParticles(camera);
+			
 			guiRenderer.render(guis); 
 			DisplayManager.updateDisplay();
 			
 		}
+		ParticleMaster.cleanUp();
 		buffers.cleanUp();
 		waterShader.cleanUp();
 		guiRenderer.cleanup();
