@@ -94,15 +94,14 @@ public class MainGameLoop {
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 		// ***************************************
 		
-		ModelData palletData = OBJFileLoader.loadOBJ("house");
+/*		ModelData palletData = OBJFileLoader.loadOBJ("house");
 		RawModel palletModel = loader.loadToVAO(palletData.getVertices(),
 				palletData.getTextureCoords(),
 				palletData.getNormals(),
 				palletData.getIndices());
 		TexturedModel pallet = new TexturedModel(palletModel,
-				new ModelTexture(loader.loadTexture("house")));
-		index[Entity.palletType] = cc++;
-		texturedModels.add(pallet);
+				new ModelTexture(loader.loadTexture("house")));*/
+
 		
 		ModelData treeData = OBJFileLoader.loadOBJ("tree");		
 		RawModel treeModel = loader.loadToVAO(treeData.getVertices(), 
@@ -112,10 +111,10 @@ public class MainGameLoop {
 		TexturedModel tree = new TexturedModel(treeModel, 
 						new ModelTexture(loader.loadTexture("tree")));
 		texturedModels.add(tree);
-		index[Entity.treeType] = cc++;
+		index[EntityDetect.tTree] = cc++;
 		
 		
-		ModelData flowerData = OBJFileLoader.loadOBJ("grassModel");
+/*		ModelData flowerData = OBJFileLoader.loadOBJ("grassModel");
 		RawModel flowerModel = loader.loadToVAO(flowerData.getVertices(), 
 				flowerData.getTextureCoords(), 
 				flowerData.getNormals(),
@@ -125,10 +124,10 @@ public class MainGameLoop {
 		flower.getTexture().setHasTransparency(true);
 		flower.getTexture().setUseFakeLighting(true);
 		texturedModels.add(flower);
-		index[Entity.flowerType] = cc++;
+		index[EntityDetect.tf] = cc++;*/
 		
 		
-		ModelData fernData = OBJFileLoader.loadOBJ("fern");
+/*		ModelData fernData = OBJFileLoader.loadOBJ("fern");
 		RawModel fernModel = loader.loadToVAO(fernData.getVertices(), 
 				fernData.getTextureCoords(), 
 				fernData.getNormals(),
@@ -138,7 +137,7 @@ public class MainGameLoop {
 		fern.getTexture().setHasTransparency(true);
 		texturedModels.add(fern);
 		index[Entity.fernType] = cc++;
-		
+	*/	
 		ModelData lowPolyTreeData = OBJFileLoader.loadOBJ("lowPolyTree");
 		RawModel lowPolyTreeModel = loader.loadToVAO(lowPolyTreeData.getVertices(), 
 				lowPolyTreeData.getTextureCoords(), 
@@ -146,8 +145,6 @@ public class MainGameLoop {
 				lowPolyTreeData.getIndices());
 		TexturedModel lowPolyTree = new TexturedModel(lowPolyTreeModel,
 				new ModelTexture(loader.loadTexture("lowPolyTree")));
-		texturedModels.add(lowPolyTree);
-		index[Entity.palletType] = cc++;
 		
 		ModelData lampData = OBJFileLoader.loadOBJ("lamp");
 		RawModel lampModel = loader.loadToVAO(lampData.getVertices(), 
@@ -158,15 +155,17 @@ public class MainGameLoop {
 				new ModelTexture(loader.loadTexture("lamp")));
 		lamp.getTexture().setHasTransparency(true);
 		texturedModels.add(lamp);
+		index[EntityDetect.tTorch] = cc++;
 		
-		ModelData bunnyData = OBJFileLoader.loadOBJ("person");
+/*		ModelData bunnyData = OBJFileLoader.loadOBJ("person");
 		RawModel bunnyModel = loader.loadToVAO(bunnyData.getVertices(), 
 				bunnyData.getTextureCoords(), 
 				bunnyData.getNormals(),
 				bunnyData.getIndices());
 		TexturedModel bunny = new TexturedModel(bunnyModel,
 				new ModelTexture(loader.loadTexture("playerTexture")));
-		texturedModels.add(bunny);
+		texturedModels.add(bunny);*/
+
 		
 		ModelData fireplaceData = OBJFileLoader.loadOBJ("fire");
 		RawModel fireplaceModel = loader.loadToVAO(fireplaceData.getVertices(), 
@@ -176,8 +175,9 @@ public class MainGameLoop {
 		TexturedModel fireplace = new TexturedModel(fireplaceModel,
 				new ModelTexture(loader.loadTexture("fireplace")));
 		texturedModels.add(fireplace);
+		index[EntityDetect.tFirecamp] = cc++;
 		
-		ModelData grassData = OBJFileLoader.loadOBJ("grassModel");
+/*		ModelData grassData = OBJFileLoader.loadOBJ("grassModel");
 		RawModel grassModel = loader.loadToVAO(grassData.getVertices(), 
 				grassData.getTextureCoords(), 
 				grassData.getNormals(),
@@ -186,9 +186,9 @@ public class MainGameLoop {
 				new ModelTexture(loader.loadTexture("grassTexture")));
 		grass.getTexture().setHasTransparency(true);
 		grass.getTexture().setUseFakeLighting(true);
-		texturedModels.add(grass);
+		texturedModels.add(grass);*/
 
-		ModelData houseData = OBJFileLoader.loadOBJ("whouse");
+/*		ModelData houseData = OBJFileLoader.loadOBJ("whouse");
 		RawModel houseModel = loader.loadToVAO(houseData.getVertices(), 
 				houseData.getTextureCoords(), 
 				houseData.getNormals(),
@@ -196,7 +196,7 @@ public class MainGameLoop {
 		TexturedModel house = new TexturedModel(houseModel,
 				new ModelTexture(loader.loadTexture("whouse")));
 		house.getTexture().setHasTransparency(true);
-		texturedModels.add(house);
+		texturedModels.add(house);*/
 		
 		ModelData princeData = OBJFileLoader.loadOBJ("small_prince");
 		RawModel princeModel = loader.loadToVAO(princeData.getVertices(), 
@@ -205,6 +205,8 @@ public class MainGameLoop {
 				princeData.getIndices());
 		TexturedModel prince = new TexturedModel(princeModel,
 				new ModelTexture(loader.loadTexture("prince")));
+		texturedModels.add(prince);
+		index[EntityDetect.tPlayer] = cc++;
 		
 		ModelData rockData = OBJFileLoader.loadOBJ("boulder");
 		RawModel rockModel = loader.loadToVAO(rockData.getVertices(), 
@@ -213,6 +215,8 @@ public class MainGameLoop {
 				rockData.getIndices());
 		TexturedModel rock = new TexturedModel(rockModel,
 				new ModelTexture(loader.loadTexture("white")));
+		texturedModels.add(rock);
+		index[EntityDetect.tStone] = cc++;		
 		
 		ModelData oldhouseData = OBJFileLoader.loadOBJ("oldhouse");
 		RawModel oldhouseModel = loader.loadToVAO(oldhouseData.getVertices(), 
@@ -221,6 +225,9 @@ public class MainGameLoop {
 				oldhouseData.getIndices());
 		TexturedModel oldhouse = new TexturedModel(oldhouseModel,
 				new ModelTexture(loader.loadTexture("oldhouse")));
+		index[EntityDetect.tHouse] = cc++;
+		texturedModels.add(oldhouse);
+		
 		List<Entity> entities = new ArrayList<Entity>();
 		/*
 		for(int i=1;i<=24;i++){
@@ -236,20 +243,61 @@ public class MainGameLoop {
 		}
 		*/
 		ModelData basictempleData = OBJFileLoader.loadOBJ("temple");
-//		System.out.println("Here" + );
 		RawModel basictempleModel = loader.loadToVAO(basictempleData.getVertices(), 
 				basictempleData.getTextureCoords(), 
 				basictempleData.getNormals(),
 				basictempleData.getIndices());
 		TexturedModel basictemple = new TexturedModel(basictempleModel,
 				new ModelTexture(loader.loadTexture("box")));
-		entities.add(new Entity(basictemple, new Vector3f(800, 10, 800), 0, 0, 0, 0.5f, 14));
 
+		texturedModels.add(basictemple);
+		index[EntityDetect.tTemple] = cc++;
 		
-		Player player;
-		Player player1 = new Player(prince, new Vector3f(800, 0, 800), 0f, 0f, 0f ,0.2f);
-		Player player2 = new Player(bunny, new Vector3f(800, 0 , 800), 0 ,0, 0, 1);
-		player = player1;
+		ModelData ballData = OBJFileLoader.loadOBJ("ball");
+		RawModel ballModel = loader.loadToVAO(ballData.getVertices(), 
+				ballData.getTextureCoords(), 
+				ballData.getNormals(),
+				ballData.getIndices());
+		TexturedModel ball = new TexturedModel(ballModel,
+				new ModelTexture(loader.loadTexture("ball")));
+		texturedModels.add(ball);
+		index[EntityDetect.tTemple] = cc++;
+		
+		ModelData mineralData = OBJFileLoader.loadOBJ("boulder");
+		RawModel mineralModel = loader.loadToVAO(mineralData.getVertices(), 
+				mineralData.getTextureCoords(), 
+				mineralData.getNormals(),
+				mineralData.getIndices());
+		TexturedModel mine = new TexturedModel(mineralModel,
+				new ModelTexture(loader.loadTexture("mineral")));
+		texturedModels.add(mine);
+		index[EntityDetect.tMineral] = cc++;		
+		entities.add(new Entity(mine, new Vector3f(1000, 10, 800), 0, 0, 0, 6.0f, 14));
+		
+		ModelData boatData = OBJFileLoader.loadOBJ("boat");
+		RawModel boatModel = loader.loadToVAO(boatData.getVertices(), 
+				boatData.getTextureCoords(), 
+				boatData.getNormals(),
+				boatData.getIndices());
+		TexturedModel boat = new TexturedModel(boatModel,
+				new ModelTexture(loader.loadTexture("boat")));
+		texturedModels.add(boat);
+		index[EntityDetect.tBoat] = cc++;		
+		entities.add(new Entity(boat, new Vector3f(700, 30, 700), 0, 0, 0, 10.0f, EntityDetect.tBoat));
+		
+		ModelData rabbitData = OBJFileLoader.loadOBJ("Rabbit");
+		RawModel rabbitModel = loader.loadToVAO(rabbitData.getVertices(), 
+				rabbitData.getTextureCoords(), 
+				rabbitData.getNormals(),
+				rabbitData.getIndices());
+		TexturedModel rabbit = new TexturedModel(rabbitModel,
+				new ModelTexture(loader.loadTexture("rabbit")));
+		texturedModels.add(rabbit);
+		index[EntityDetect.tRabbit] = cc++;		
+		entities.add(new Entity(rabbit, new Vector3f(600, 30, 600), 0, 0, 0, 10.0f, EntityDetect.tRabbit));
+		
+		Player player = new Player(prince, new Vector3f(700, 0, 700), 0f, 0f, 0f ,0.2f);
+
 		List<Terrain>terrains = new ArrayList<Terrain>();
 		Terrain terrain = new Terrain(0,0,loader, texturePack, blendMap, "heightmap");
 		terrains.add(terrain);
@@ -257,14 +305,13 @@ public class MainGameLoop {
 		
 		
 		Random random = new Random();
-		for (int i = 0; i< 1; i++) {
-
-				float x = random.nextFloat() *800;
-				float z = random.nextFloat() *800;
+		entities.add(new Entity(basictemple, new Vector3f(500, 30, 800), 0, 0, 0, 1.5f, 14));
+		for (int i = 0; i< 400; i++) {
+				float x = random.nextFloat() *1600;
+				float z = random.nextFloat() *1600;
 				float y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(oldhouse,
-						new Vector3f(x,y,z),
-						0, 0, 0, 2f, Entity.treeType));
+				entities.add(new Entity(tree,
+						new Vector3f(x,y,z),0, 0, 0,  2.0f+random.nextFloat()*2.5f, EntityDetect.tTree));
 				for (int p=(int)x -5 ; p<=(int)x +5; p++) 
 					for (int q=(int)z -5; q<=(int)z+5; q++) {
 						if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
@@ -272,6 +319,76 @@ public class MainGameLoop {
 						detectMap[p][q] = true;
 					}
 		}
+		for (int i = 0; i< 400; i++) {
+			float x = random.nextFloat() *1600;
+			float z = random.nextFloat() *1600;
+			float y = terrain.getHeightOfTerrain(x, z);
+			entities.add(new Entity(lowPolyTree,
+					new Vector3f(x,y,z),0, 0, 0, random.nextFloat()*2.5f, EntityDetect.tTree));
+			for (int p=(int)x -5 ; p<=(int)x +5; p++) 
+				for (int q=(int)z -5; q<=(int)z+5; q++) {
+					if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
+						continue;
+					detectMap[p][q] = true;
+				}
+	}
+		
+		for (int i = 0; i< 300; i++) {
+			float x = random.nextFloat() *1600;
+			float z = random.nextFloat() *1600;
+			float y = terrain.getHeightOfTerrain(x, z);
+			entities.add(new Entity(rock,
+					new Vector3f(x,y,z),0, 0, 0,  random.nextFloat()*2.0f, EntityDetect.tStone));
+			for (int p=(int)x -5 ; p<=(int)x +5; p++) 
+				for (int q=(int)z -5; q<=(int)z+5; q++) {
+					if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
+						continue;
+					detectMap[p][q] = true;
+				}
+	}
+		
+		for (int i = 0; i< 100; i++) {
+			float x = random.nextFloat() *1600;
+			float z = random.nextFloat() *1600;
+			float y = terrain.getHeightOfTerrain(x, z);
+			entities.add(new Entity(mine,
+					new Vector3f(x,y,z),0, 0, 0,  random.nextFloat()*1.0f, EntityDetect.tMineral));
+			for (int p=(int)x -5 ; p<=(int)x +5; p++) 
+				for (int q=(int)z -5; q<=(int)z+5; q++) {
+					if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
+						continue;
+					detectMap[p][q] = true;
+				}
+	}
+		for (int i = 0; i< 30; i++) {
+			float x = random.nextFloat() *1600;
+			float z = random.nextFloat() *1600;
+			float y = terrain.getHeightOfTerrain(x, z);
+			entities.add(new Entity(rabbit,
+					new Vector3f(x,y,z),0, 0, 0,  random.nextFloat()* 1.5f, EntityDetect.tRabbit));
+			for (int p=(int)x -5 ; p<=(int)x +5; p++) 
+				for (int q=(int)z -5; q<=(int)z+5; q++) {
+					if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
+						continue;
+					detectMap[p][q] = true;
+				}
+	}
+		for (int i = 0; i< 10; i++) {
+			float x = random.nextFloat() *1600;
+			float z = random.nextFloat() *1600;
+			float y = terrain.getHeightOfTerrain(x, z);
+			entities.add(new Entity(ball,
+					new Vector3f(x,y,z),0, 0, 0, 0.5f, EntityDetect.tRabbit));
+			for (int p=(int)x -5 ; p<=(int)x +5; p++) 
+				for (int q=(int)z -5; q<=(int)z+5; q++) {
+					if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
+						continue;
+					detectMap[p][q] = true;
+				}
+	}
+		
+		
+		
 		entities.add(player);
 		MasterRenderer renderer = new MasterRenderer(loader);
 		
@@ -279,7 +396,7 @@ public class MainGameLoop {
 		float lightness;		
 		lights.add(new Light(new Vector3f(165, 10, -293), new Vector3f(2, 0, 0), new Vector3f(1f, 0.01f, 0.02f)));
 		lights.add(new Light(new Vector3f(370, 17, -300), new Vector3f(0, 2, 2), new Vector3f(1f, 0.01f, 0.02f)));		
-		entities.add(new Entity(lamp, new Vector3f(165,terrain.getHeightOfTerrain(165, -293),-293),	0, 0, 0, 1f, Entity.lampType));
+		//entities.add(new Entity(lamp, new Vector3f(165,terrain.getHeightOfTerrain(165, -293),-293),	0, 0, 0, 1f, Entity.lampType));
 		
 		
 		Camera camera =new Camera(player);
@@ -293,30 +410,42 @@ public class MainGameLoop {
 		float x_base = -0.95f;
 		float gui_scale = 0.04f;
 		
-		GuiTexture guitorch = new GuiTexture(loader.loadTexture("torch"),new Vector2f(x_base, z_base), new Vector2f(gui_scale, gui_scale*UIratio));
-		guis.add(guitorch);
+		GuiTexture guiheartbeat = new GuiTexture(loader.loadTexture("heart-beats"),new Vector2f(x_base, z_base), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guiheartbeat);
+		
 		GuiTexture guiwood = new GuiTexture(loader.loadTexture("pine-tree"),new Vector2f(x_base, z_base - gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
 		guis.add(guiwood);
-		GuiTexture guiheartbeat = new GuiTexture(loader.loadTexture("heart-beats"),new Vector2f(x_base, z_base - 2*gui_dis), new Vector2f(gui_scale,gui_scale*UIratio));
-		guis.add(guiheartbeat);
-		GuiTexture guimeat = new GuiTexture(loader.loadTexture("meat"),new Vector2f(x_base, z_base - 3*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
-		guis.add(guimeat);
-		GuiTexture guistone = new GuiTexture(loader.loadTexture("stone-block"),new Vector2f(x_base, z_base - 4*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		
+		GuiTexture guistone = new GuiTexture(loader.loadTexture("stone-block"),new Vector2f(x_base, z_base - 2*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
 		guis.add(guistone);
-		GuiTexture mineral = new GuiTexture(loader.loadTexture("minerals"),new Vector2f(x_base, z_base - 5*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		
+		GuiTexture mineral = new GuiTexture(loader.loadTexture("minerals"),new Vector2f(x_base, z_base - 3*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
 		guis.add(mineral);
-		GuiTexture guispade = new GuiTexture(loader.loadTexture("sword-spade"),new Vector2f(x_base, z_base - 6*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		
+		GuiTexture guimeat = new GuiTexture(loader.loadTexture("meat"),new Vector2f(x_base, z_base - 4*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guimeat);
+		
+		GuiTexture guispade = new GuiTexture(loader.loadTexture("sword-spade"),new Vector2f(x_base, z_base - 5*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
 		guis.add(guispade);
-		GuiTexture guiflame = new GuiTexture(loader.loadTexture("flame"),new Vector2f(x_base, z_base - 7*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		
+		GuiTexture guiflame = new GuiTexture(loader.loadTexture("flame"),new Vector2f(x_base, z_base - 6*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
 		guis.add(guiflame);
-		GuiTexture guicampfire = new GuiTexture(loader.loadTexture("campfire"),new Vector2f(x_base, z_base - 8*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		
+		GuiTexture guicampfire = new GuiTexture(loader.loadTexture("campfire"),new Vector2f(x_base, z_base - 7*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
 		guis.add(guicampfire);
-		GuiTexture guihouse = new GuiTexture(loader.loadTexture("church"),new Vector2f(x_base, z_base - 9*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		
+		GuiTexture guihouse = new GuiTexture(loader.loadTexture("church"),new Vector2f(x_base, z_base - 8*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
 		guis.add(guihouse);
+		
+		GuiTexture guitorch = new GuiTexture(loader.loadTexture("torch"),new Vector2f(x_base, z_base - 9*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
+		guis.add(guitorch);
+		
 		GuiTexture guiboot = new GuiTexture(loader.loadTexture("leather-boot"),new Vector2f(x_base, z_base - 10*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
 		guis.add(guiboot);
+		
 		GuiTexture guiboat = new GuiTexture(loader.loadTexture("sailboat"),new Vector2f(x_base, z_base - 11*gui_dis), new Vector2f(gui_scale, gui_scale*UIratio));
 		guis.add(guiboat);
+		
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		
 		
@@ -328,9 +457,9 @@ public class MainGameLoop {
 		
 		MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
 		
-		Entity lampEntity = new Entity(lamp, new Vector3f(293, -6.8f, -305)
-				, 0, 0, 0, 1, Entity.lampType);
-		entities.add(lampEntity);
+		//Entity lampEntity = new Entity(lamp, new Vector3f(293, -6.8f, -305)
+		//		, 0, 0, 0, 1, Entity.lampType);
+		//entities.add(lampEntity);
 		Light light = new Light(new Vector3f(200, 7, -305), new Vector3f(0, 2, 2), new Vector3f(1f, 0.01f, 0.02f));
 		lights.add(light);
 			
@@ -422,7 +551,7 @@ public class MainGameLoop {
 				textTime += 1;
 				if (textTime == 100) {
 					entityDetect.textShutDown();
-					player.setTexturedModel(bunny);
+					//player.setTexturedModel(bunny);
 				}
 				System.out.println(textTime);
 			}
@@ -475,7 +604,6 @@ public class MainGameLoop {
 				}
 			}
 			
-			uiManager.check();
 			uiManager.checkUIClick();
 			TextMaster.render();
 			
@@ -493,15 +621,5 @@ public class MainGameLoop {
 
 	}
 
-/*	public void addEntityGoWithMouse(List<Entity> entities, int type){
-		switch ( type) {
-		case : fireplaceType
-			entities.add(new Entity(fireplace, terrainPoint,
-						0, 0, 0, 1f, fireplaceType);
-			break;
 
-		default:
-			break;
-		}
-	}*/
 }

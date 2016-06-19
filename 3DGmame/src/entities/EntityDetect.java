@@ -18,6 +18,26 @@ public class EntityDetect {
 
 	
 	public static final int totType = 12;
+	
+	public static final int tHeart = 0;
+	public static final int tTree = 1;
+	public static final int tStone = 2;
+	public static final int tMineral = 3;
+	public static final int tFood = 4;
+	public static final int tFax = 5;
+	public static final int tFire = 6;
+	public static final int tFirecamp = 7;
+	public static final int tTorch = 8;
+	public static final int tHouse = 9;
+	public static final int tBoot = 10;
+	public static final int tBoat = 11;
+	public static final int tTemple = 13;
+	public static final int tBall = 14;	
+	public static final int tRabbit = 15;
+	
+	public static final int tPlayer = 12;
+
+	
 	private FontType font;
 	
 	private GUIText text;
@@ -44,7 +64,11 @@ public class EntityDetect {
 		for (int i = 0; i< totType; i++) {
 			Vector2f pos = new Vector2f(x_base  ,z_base + (gui_dis*(float)i));
 			//System.out.println(pos.x + " " + pos.y);
-			GUIText pack = new GUIText("00" , gui_scale, font, pos , 1.5f, false);
+			GUIText pack;
+			if (i == 0) 
+				pack = new GUIText("20" , gui_scale, font, pos , 1.5f, false);
+			else
+				pack = new GUIText("00" , gui_scale, font, pos , 1.5f, false);
 			pack.setColour(r ,g, b);
 			this.packText.add(pack);
 		}
@@ -58,7 +82,7 @@ public class EntityDetect {
 				if (playerIsNearEntity(positionPlayer, entity.getPosition()) && 
 						mouseIsNearEntity(position, entity.getPosition())) {
 					int type = entity.getEntityType();
-					if (type == Entity.playerType || type == Entity.palletType || type == Entity.houseType || type == Entity.fireplaceType){
+					if (type == tPlayer || type == tFire || type == tHouse){
 						entity.setValid(true);
 					}else {
 						entity.setValid(false);
@@ -116,21 +140,7 @@ public class EntityDetect {
 		return false;
 	}
 	
-	private String getTypeName(int type){
-		switch (type) {
-		case Entity.treeType:
-			return "treeType";
-		case Entity.fernType:
-			return "fernType";
-		case Entity.flowerType:
-			return "flowerType";
-		case Entity.lowtreeType:
-			return "lowtreeType";
-		default:
-			return "UndefinedType";
-		}
-	}
-	
+
 	public void textPopUp() {
 		this.text  = new GUIText("This is a test text!", 1, font, new Vector2f(0f,0.5f), 1f, true);
 		this.text.setColour(1, 0, 0);
@@ -151,6 +161,10 @@ public class EntityDetect {
 	
 	public boolean getTextStatus() {
 		return textShow;
+	}
+	
+	public void heartDecrease() {
+		
 	}
 	
 	

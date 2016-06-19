@@ -33,22 +33,7 @@ public class GUIControl {
 		this.font = font;
 	}
 	
-	public void check() {
-		if (count.getCount(Entity.flowerType) >= 5) {
-			GuiTexture gui = new GuiTexture(loader.loadTexture("wood"),new Vector2f(-0.7f, 0.8f), new Vector2f(0.08f, 0.08f* MainGameLoop.UIratio));
-			guis.add(gui);
-			count.clearCount(Entity.flowerType);
-			
-			packText.get(Entity.flowerType - 1).remove();
-			Vector2f pos = new Vector2f(0.1f  ,0.05f + (0.1f*(float)(Entity.flowerType - 1)));
-			System.out.println(pos.x + " " + pos.y);
-			GUIText pack = new GUIText("0" ,3, font, pos , 1.5f, false);
-			pack.setColour(1, 1, 1);
-			packText.set(Entity.flowerType- 1, pack);
-			
-		}
-	}
-	
+
 	public void checkUIClick() {
 		if (Mouse.isButtonDown(0)) {
 			//System.out.println(Mouse.getX() +" " + Mouse.getY());
@@ -60,15 +45,15 @@ public class GUIControl {
 		Entity temp = null;
 			if (terrainPoint == null) return null;
 			if (Keyboard.isKeyDown(Keyboard.KEY_F1)) {
-				temp = new Entity(MainGameLoop.texturedModels.get(Entity.fireplaceType), terrainPoint, 0, 0, 0, 1, Entity.fireplaceType);
+				temp = new Entity(MainGameLoop.texturedModels.get(EntityDetect.tFirecamp), terrainPoint, 0, 0, 0, 1, EntityDetect.tFirecamp);
 				entities.add(temp);
 			}
 			else if (Keyboard.isKeyDown(Keyboard.KEY_F3)) {
-				temp = new Entity(MainGameLoop.texturedModels.get(Entity.palletType), terrainPoint, 0, 0, 0, 1, Entity.palletType);
+				temp = new Entity(MainGameLoop.texturedModels.get(EntityDetect.tHouse), terrainPoint, 0, 0, 0, 1, EntityDetect.tHouse);
 				entities.add(temp);
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_F4)) {
-				temp = new Entity(MainGameLoop.texturedModels.get(Entity.houseType), terrainPoint, 0, 0, 0, 1, Entity.houseType);
+				temp = new Entity(MainGameLoop.texturedModels.get(EntityDetect.tBoat), terrainPoint, 0, 0, 0, 1, EntityDetect.tHouse);
 				entities.add(temp);
 			}
 			
