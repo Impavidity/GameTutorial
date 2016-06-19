@@ -54,6 +54,7 @@ public class GUIControl {
 				entities.add(temp);
 				count.minusCount(EntityDetect.tFirecamp, 1);
 			}
+
 			else if (Keyboard.isKeyDown(Keyboard.KEY_F10) && Keyboard.isKeyDown(Keyboard.KEY_U) && count.getCount(EntityDetect.tHouse) >=1) {
 				temp = new Entity(MainGameLoop.texturedModels.get(EntityDetect.tHouse), terrainPoint, 0, 0, 0, 1, EntityDetect.tHouse);
 				entities.add(temp);

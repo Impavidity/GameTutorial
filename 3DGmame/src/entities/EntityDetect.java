@@ -31,6 +31,9 @@ public class EntityDetect {
 	public static final int tHouse = 9;
 	public static final int tBoot = 10;
 	public static final int tBoat = 11;
+	public static final int tTemple = 13;
+	public static final int tBall = 14;	
+	public static final int tRabbit = 15;
 	
 	public static final int tPlayer = 12;
 
