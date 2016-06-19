@@ -25,6 +25,11 @@ public class GUIControl {
 	private List<GUIText> packText;
 	private FontType font;
 	
+	float gui_dis = 0.0825f;
+	float z_base = 0.054f;
+	float x_base = 0.029f;
+	float gui_scale = 1f;
+	
 	public GUIControl(Count count, List<GuiTexture> guis, Loader loader,List<GUIText> packText, FontType font) {
 		this.count = count;
 		this.guis = guis;
@@ -44,17 +49,15 @@ public class GUIControl {
 		Vector3f terrainPoint = picker.getCurrentTerrainPoint();
 		Entity temp = null;
 			if (terrainPoint == null) return null;
-			if (Keyboard.isKeyDown(Keyboard.KEY_F1)) {
-				temp = new Entity(MainGameLoop.texturedModels.get(Entity.fireplaceType), terrainPoint, 0, 0, 0, 1, Entity.fireplaceType);
+			if (Keyboard.isKeyDown(Keyboard.KEY_F8) && Keyboard.isKeyDown(Keyboard.KEY_U) && count.getCount(EntityDetect.tFirecamp) >=1) {
+				temp = new Entity(MainGameLoop.texturedModels.get(EntityDetect.tFirecamp), terrainPoint, 0, 0, 0, 1, EntityDetect.tFirecamp);
 				entities.add(temp);
+				count.minusCount(EntityDetect.tFirecamp, 1);
 			}
-			else if (Keyboard.isKeyDown(Keyboard.KEY_F3)) {
-				temp = new Entity(MainGameLoop.texturedModels.get(Entity.palletType), terrainPoint, 0, 0, 0, 1, Entity.palletType);
+			else if (Keyboard.isKeyDown(Keyboard.KEY_F10) && Keyboard.isKeyDown(Keyboard.KEY_U) && count.getCount(EntityDetect.tHouse) >=1) {
+				temp = new Entity(MainGameLoop.texturedModels.get(EntityDetect.tHouse), terrainPoint, 0, 0, 0, 1, EntityDetect.tHouse);
 				entities.add(temp);
-			}
-			if (Keyboard.isKeyDown(Keyboard.KEY_F4)) {
-				temp = new Entity(MainGameLoop.texturedModels.get(Entity.houseType), terrainPoint, 0, 0, 0, 1, Entity.houseType);
-				entities.add(temp);
+				count.minusCount(EntityDetect.tHouse, 1);
 			}
 			
 		return temp;
@@ -62,7 +65,7 @@ public class GUIControl {
 	
 	public ParticleSystem checkKeyWithParticle(MousePicker picker, ParticleTexture particleTexture){
 		ParticleSystem system = null;
-		if (Keyboard.isKeyDown(Keyboard.KEY_F2)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_F7) && Keyboard.isKeyDown(Keyboard.KEY_U) && count.getCount(EntityDetect.tFire) >=1) {
 			system = new ParticleSystem(particleTexture, 40, 8, 0.1f, 4, 2);
 			system.randomizeRotation();
 			system.setDirection(new Vector3f(0, 1, 0), 0.05f);
@@ -73,5 +76,201 @@ public class GUIControl {
 		}
 		return system;
 	}
+	
+	public void GoodTrans(){
+		if (Keyboard.isKeyDown(Keyboard.KEY_F5)) {
+			if (count.getCount(EntityDetect.tTree) >= 10) {
+				count.minusCount(EntityDetect.tTree, 10);
+				count.setCount(EntityDetect.tFood);
+				
+				packText.get(EntityDetect.tTree).remove();
+				Vector2f pos1 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tTree));
+				GUIText pack1 = new GUIText(count.getCount(EntityDetect.tTree) + "" , gui_scale, font, pos1 , 1.5f, false);
+				packText.set(EntityDetect.tTree, pack1);
+				packText.get(EntityDetect.tFood).remove();
+				Vector2f pos2 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tFood));
+				GUIText pack2 = new GUIText(count.getCount(EntityDetect.tTree) + "" , gui_scale, font, pos2 , 1.5f, false);
+				packText.set(EntityDetect.tFood, pack2);
+			}
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_F6)) {
+			if (count.getCount(EntityDetect.tTree) >= 10 && count.getCount(EntityDetect.tStone) >= 5) {
+				count.minusCount(EntityDetect.tTree, 10);
+				count.minusCount(EntityDetect.tStone, 5);
+				count.setCount(EntityDetect.tFax);
+				
+				packText.get(EntityDetect.tTree).remove();
+				Vector2f pos1 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tTree));
+				GUIText pack1 = new GUIText(count.getCount(EntityDetect.tTree) + "" , gui_scale, font, pos1 , 1.5f, false);
+				packText.set(EntityDetect.tTree, pack1);
+				packText.get(EntityDetect.tStone).remove();
+				Vector2f pos2 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tStone));
+				GUIText pack2 = new GUIText(count.getCount(EntityDetect.tStone) + "" , gui_scale, font, pos2 , 1.5f, false);
+				packText.set(EntityDetect.tStone, pack2);
+				packText.get(EntityDetect.tFax).remove();
+				Vector2f pos3 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tFax));
+				GUIText pack3 = new GUIText(count.getCount(EntityDetect.tFax) + "" , gui_scale, font, pos3 , 1.5f, false);
+				packText.set(EntityDetect.tFax, pack3);
+			}
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_F7)) {
+			if (count.getCount(EntityDetect.tTree) >= 20 && count.getCount(EntityDetect.tStone) >= 10) {
+				count.minusCount(EntityDetect.tTree, 20);
+				count.minusCount(EntityDetect.tStone, 10);
+				count.setCount(EntityDetect.tFire);
+				
+				packText.get(EntityDetect.tTree).remove();
+				Vector2f pos1 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tTree));
+				GUIText pack1 = new GUIText(count.getCount(EntityDetect.tTree) + "" , gui_scale, font, pos1 , 1.5f, false);
+				packText.set(EntityDetect.tTree, pack1);
+				packText.get(EntityDetect.tStone).remove();
+				Vector2f pos2 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tStone));
+				GUIText pack2 = new GUIText(count.getCount(EntityDetect.tStone) + "" , gui_scale, font, pos2 , 1.5f, false);
+				packText.set(EntityDetect.tStone, pack2);
+				packText.get(EntityDetect.tFire).remove();
+				Vector2f pos3 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tFire));
+				GUIText pack3 = new GUIText(count.getCount(EntityDetect.tFire) + "" , gui_scale, font, pos3 , 1.5f, false);
+				packText.set(EntityDetect.tFire, pack3);
+			}
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_F8)) {
+			if (count.getCount(EntityDetect.tTree) >= 20 && count.getCount(EntityDetect.tStone) >= 5) {
+				count.minusCount(EntityDetect.tTree, 20);
+				count.minusCount(EntityDetect.tStone, 5);
+				count.setCount(EntityDetect.tFirecamp);
+				
+				packText.get(EntityDetect.tTree).remove();
+				Vector2f pos1 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tTree));
+				GUIText pack1 = new GUIText(count.getCount(EntityDetect.tTree) + "" , gui_scale, font, pos1 , 1.5f, false);
+				packText.set(EntityDetect.tTree, pack1);
+				packText.get(EntityDetect.tStone).remove();
+				Vector2f pos2 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tStone));
+				GUIText pack2 = new GUIText(count.getCount(EntityDetect.tStone) + "" , gui_scale, font, pos2 , 1.5f, false);
+				packText.set(EntityDetect.tStone, pack2);
+				packText.get(EntityDetect.tFirecamp).remove();
+				Vector2f pos3 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tFirecamp));
+				GUIText pack3 = new GUIText(count.getCount(EntityDetect.tFirecamp) + "" , gui_scale, font, pos3 , 1.5f, false);
+				packText.set(EntityDetect.tFirecamp, pack3);
+			}
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_F9)) {
+			if (count.getCount(EntityDetect.tTree) >= 20 && count.getCount(EntityDetect.tStone) >= 5) {
+				count.minusCount(EntityDetect.tTree, 20);
+				count.minusCount(EntityDetect.tStone, 5);
+				count.setCount(EntityDetect.tTorch);
+				
+				packText.get(EntityDetect.tTree).remove();
+				Vector2f pos1 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tTree));
+				GUIText pack1 = new GUIText(count.getCount(EntityDetect.tTree) + "" , gui_scale, font, pos1 , 1.5f, false);
+				packText.set(EntityDetect.tTree, pack1);
+				packText.get(EntityDetect.tStone).remove();
+				Vector2f pos2 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tStone));
+				GUIText pack2 = new GUIText(count.getCount(EntityDetect.tStone) + "" , gui_scale, font, pos2 , 1.5f, false);
+				packText.set(EntityDetect.tStone, pack2);
+				packText.get(EntityDetect.tTorch).remove();
+				Vector2f pos3 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tTorch));
+				GUIText pack3 = new GUIText(count.getCount(EntityDetect.tTorch) + "" , gui_scale, font, pos3 , 1.5f, false);
+				packText.set(EntityDetect.tTorch, pack3);
+			}
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_F10)) {
+			if (count.getCount(EntityDetect.tTree) >= 40 && count.getCount(EntityDetect.tStone) >= 20 &&
+					count.getCount(EntityDetect.tMineral) >= 20) {
+				count.minusCount(EntityDetect.tTree, 20);
+				count.minusCount(EntityDetect.tStone, 5);
+				count.minusCount(EntityDetect.tMineral, 20);
+				count.setCount(EntityDetect.tHouse);
+				
+				packText.get(EntityDetect.tTree).remove();
+				Vector2f pos1 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tTree));
+				GUIText pack1 = new GUIText(count.getCount(EntityDetect.tTree) + "" , gui_scale, font, pos1 , 1.5f, false);
+				packText.set(EntityDetect.tTree, pack1);
+				packText.get(EntityDetect.tStone).remove();
+				Vector2f pos2 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tStone));
+				GUIText pack2 = new GUIText(count.getCount(EntityDetect.tStone) + "" , gui_scale, font, pos2 , 1.5f, false);
+				packText.set(EntityDetect.tStone, pack2);
+				packText.get(EntityDetect.tMineral).remove();
+				Vector2f pos3 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tMineral));
+				GUIText pack3 = new GUIText(count.getCount(EntityDetect.tMineral) + "" , gui_scale, font, pos3 , 1.5f, false);
+				packText.set(EntityDetect.tMineral, pack3);
+				packText.get(EntityDetect.tHouse).remove();
+				Vector2f pos4 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tHouse));
+				GUIText pack4 = new GUIText(count.getCount(EntityDetect.tHouse) + "" , gui_scale, font, pos4 , 1.5f, false);
+				packText.set(EntityDetect.tHouse, pack4);
+			}
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_F11)) {
+			if (count.getCount(EntityDetect.tTree) >= 20 && count.getCount(EntityDetect.tStone) >= 20 &&
+					count.getCount(EntityDetect.tMineral) >= 20 && count.getCount(EntityDetect.tFood) >= 10) {
+				count.minusCount(EntityDetect.tTree, 20);
+				count.minusCount(EntityDetect.tStone, 20);
+				count.minusCount(EntityDetect.tMineral, 20);
+				count.minusCount(EntityDetect.tFood, 10);
+				count.setCount(EntityDetect.tBoot);
+				
+				packText.get(EntityDetect.tTree).remove();
+				Vector2f pos1 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tTree));
+				GUIText pack1 = new GUIText(count.getCount(EntityDetect.tTree) + "" , gui_scale, font, pos1 , 1.5f, false);
+				packText.set(EntityDetect.tTree, pack1);
+				packText.get(EntityDetect.tStone).remove();
+				Vector2f pos2 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tStone));
+				GUIText pack2 = new GUIText(count.getCount(EntityDetect.tStone) + "" , gui_scale, font, pos2 , 1.5f, false);
+				packText.set(EntityDetect.tStone, pack2);
+				packText.get(EntityDetect.tMineral).remove();
+				Vector2f pos3 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tMineral));
+				GUIText pack3 = new GUIText(count.getCount(EntityDetect.tMineral) + "" , gui_scale, font, pos3 , 1.5f, false);
+				packText.set(EntityDetect.tMineral, pack3);
+				packText.get(EntityDetect.tFood).remove();
+				Vector2f pos4 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tFood));
+				GUIText pack4 = new GUIText(count.getCount(EntityDetect.tFood) + "" , gui_scale, font, pos4 , 1.5f, false);
+				packText.set(EntityDetect.tFood, pack4);
+				packText.get(EntityDetect.tBoot).remove();
+				Vector2f pos5 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tBoot));
+				GUIText pack5 = new GUIText(count.getCount(EntityDetect.tBoot) + "" , gui_scale, font, pos5 , 1.5f, false);
+				packText.set(EntityDetect.tBoot, pack5);
+			}
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_F11)) {
+			if (count.getCount(EntityDetect.tTree) >= 40 && count.getCount(EntityDetect.tStone) >= 40 &&
+					count.getCount(EntityDetect.tMineral) >= 40 && count.getCount(EntityDetect.tFood) >= 20
+					&& count.getCount(EntityDetect.tFax)>= 3) {
+				count.minusCount(EntityDetect.tTree, 40);
+				count.minusCount(EntityDetect.tStone, 40);
+				count.minusCount(EntityDetect.tMineral, 40);
+				count.minusCount(EntityDetect.tFood, 20);
+				count.minusCount(EntityDetect.tFax, 3);
+				count.setCount(EntityDetect.tBoat);
+				
+				packText.get(EntityDetect.tTree).remove();
+				Vector2f pos1 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tTree));
+				GUIText pack1 = new GUIText(count.getCount(EntityDetect.tTree) + "" , gui_scale, font, pos1 , 1.5f, false);
+				packText.set(EntityDetect.tTree, pack1);
+				packText.get(EntityDetect.tStone).remove();
+				Vector2f pos2 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tStone));
+				GUIText pack2 = new GUIText(count.getCount(EntityDetect.tStone) + "" , gui_scale, font, pos2 , 1.5f, false);
+				packText.set(EntityDetect.tStone, pack2);
+				packText.get(EntityDetect.tMineral).remove();
+				Vector2f pos3 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tMineral));
+				GUIText pack3 = new GUIText(count.getCount(EntityDetect.tMineral) + "" , gui_scale, font, pos3 , 1.5f, false);
+				packText.set(EntityDetect.tMineral, pack3);
+				packText.get(EntityDetect.tFood).remove();
+				Vector2f pos4 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tFood));
+				GUIText pack4 = new GUIText(count.getCount(EntityDetect.tFood) + "" , gui_scale, font, pos4 , 1.5f, false);
+				packText.set(EntityDetect.tFood, pack4);
+				packText.get(EntityDetect.tFax).remove();
+				Vector2f pos5 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tFax));
+				GUIText pack5 = new GUIText(count.getCount(EntityDetect.tFax) + "" , gui_scale, font, pos5 , 1.5f, false);
+				packText.set(EntityDetect.tFax, pack5);
+				packText.get(EntityDetect.tBoat).remove();
+				Vector2f pos6 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tBoat));
+				GUIText pack6 = new GUIText(count.getCount(EntityDetect.tBoat) + "" , gui_scale, font, pos5 , 1.5f, false);
+				packText.set(EntityDetect.tBoat, pack6);
+			}
+		}
+		
+		
+	}
+	
+	
 	
 }

@@ -64,28 +64,80 @@ public class Count {
 		switch (type) {
 		case tHeart:
 			--cHeart;
+			break;
 		case tTree:
 			++cTree;
+			break;
 		case tStone:
 			++cStone;
+			break;
 		case tMineral:
 			++cMineral;
+			break;
 		case tFood:
 			++cFood;
+			break;
 		case tFax:
 			++cFax;
+			break;
 		case tFire:
 			++cFire;
+			break;
 		case tFirecamp:
 			++cFirecamp;
+			break;
 		case tTorch:
 			++cTorch;
+			break;
 		case tHouse:
 			++cHouse;
+			break;
 		case tBoot:
 			++cBoot;
+			break;
 		case tBoat:
 			++cBoat;
+			break;
+		default:
+			return;
+		}
+	}
+	
+	public void minusCount(int type, int t) {
+		switch (type) {
+		case tTree:
+			cTree -= t;
+			break;
+		case tStone:
+			cStone -= t;
+			break;
+		case tMineral:
+			cMineral -= t;
+			break;
+		case tFood:
+			cFood -= t;
+			break;
+		case tFax:
+			cFax -= t;
+			break;
+		case tFire:
+			cFire -= t;
+			break;
+		case tFirecamp:
+			cFirecamp -= t;
+			break;
+		case tTorch:
+			cTorch -= t;
+			break;
+		case tHouse:
+			cHouse -= t;
+			break;
+		case tBoot:
+			cBoot -= t;
+			break;
+		case tBoat:
+			cBoat -= t;
+			break;
 		default:
 			return;
 		}
@@ -95,28 +147,40 @@ public class Count {
 		switch (type) {
 		case tHeart:
 			cHeart = 20;
+			break;
 		case tTree:
 			cTree = 0;
+			break;
 		case tStone:
 			cStone = 0;
+			break;
 		case tMineral:
 			cMineral = 0;
+			break;
 		case tFood:
 			cFood = 0; 
+			break;
 		case tFax:
 			cFax = 0;
+			break;
 		case tFire:
 			cFire = 0;
+			break;
 		case tFirecamp:
 			cFirecamp = 0;
+			break;
 		case tTorch:
 			cTorch = 0;
+			break;
 		case tHouse:
 			cHouse = 0;
+			break;
 		case tBoot:
 			cBoot = 0;
+			break;
 		case tBoat:
 			cBoat = 0;
+			break;
 		default:
 			return;
 		}

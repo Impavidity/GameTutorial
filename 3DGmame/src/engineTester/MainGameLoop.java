@@ -258,6 +258,10 @@ public class MainGameLoop {
 		float z_base = 0.91f;
 		float x_base = -0.95f;
 		float gui_scale = 0.04f;
+		float gui_dis_text = 0.0825f;
+		float z_base_text = 0.054f;
+		float x_base_text = 0.029f;
+		float gui_scale_text = 1f;
 		
 		GuiTexture guiheartbeat = new GuiTexture(loader.loadTexture("heart-beats"),new Vector2f(x_base, z_base), new Vector2f(gui_scale, gui_scale*UIratio));
 		guis.add(guiheartbeat);
@@ -351,6 +355,9 @@ public class MainGameLoop {
 		ParticleSystem system = null;
 		boolean entityClickFlag = false;
 		lights.add(sun);
+		
+		int HeartCount = 0;
+		
 		//
 		while(!Display.isCloseRequested()){
 			lightness = renderer.getLightness();
@@ -437,6 +444,7 @@ public class MainGameLoop {
 							System.out.println(sysPos.get(0));
 							system = null;				
 							entityClickFlag = false;
+							count.minusCount(EntityDetect.tFire, 1);
 					}
 				}
 			}
@@ -455,7 +463,30 @@ public class MainGameLoop {
 			
 			uiManager.checkUIClick();
 			TextMaster.render();
-			
+			HeartCount ++;
+			if (HeartCount == 20) {
+				entityDetect.heartDecrease();
+				if (count.getCount(EntityDetect.tHeart) >= 0) {
+					packText.get(EntityDetect.tHeart).remove();
+					Vector2f pos = new Vector2f(x_base_text  ,z_base_text + (gui_dis_text*(float)(EntityDetect.tHeart)));
+					String sHeart = count.getCount(EntityDetect.tHeart) + "";
+					if (count.getCount(EntityDetect.tHeart)<10) {
+						sHeart = "0" + sHeart;
+					}
+					System.out.println("Heart " + sHeart + " "+pos.x +" "  +pos.y);
+					GUIText pack = new GUIText(sHeart , gui_scale_text, font, pos , 1.5f, false);
+					pack.setColour(0, 0, 0);
+					packText.set(EntityDetect.tHeart, pack);
+				}
+				HeartCount = 0;
+			}
+			if (count.getCount(EntityDetect.tHeart) <= 0) {
+				entityDetect.textPopUp("Game Over");
+			}
+			if (count.getCount(EntityDetect.tHeart) <= -20) {
+				break;
+			}
+			uiManager.GoodTrans();
 			DisplayManager.updateDisplay();
 			
 		}

@@ -79,7 +79,7 @@ public class EntityDetect {
 				if (playerIsNearEntity(positionPlayer, entity.getPosition()) && 
 						mouseIsNearEntity(position, entity.getPosition())) {
 					int type = entity.getEntityType();
-					if (type == tPlayer || type == tFire || type == tHouse){
+					if (type == tPlayer || type == tFire || type == tHouse || type == tFirecamp){
 						entity.setValid(true);
 					}else {
 						entity.setValid(false);
@@ -92,8 +92,8 @@ public class EntityDetect {
 							}
 						if(entity.isClicked() == false){
 							entity.setClicked(true);
-							if (textShow) textShutDown();
-							textPopUp();
+							//if (textShow) textShutDown();
+							//textPopUp();
 							
 							increase(type);
 							//System.out.println(getTypeName(type) + "  :  " + count.getCount(type));
@@ -138,9 +138,9 @@ public class EntityDetect {
 	}
 	
 
-	public void textPopUp() {
-		this.text  = new GUIText("This is a test text!", 1, font, new Vector2f(0f,0.5f), 1f, true);
-		this.text.setColour(1, 0, 0);
+	public void textPopUp(String slogon) {
+		this.text  = new GUIText(slogon, 10, font, new Vector2f(0f,0.5f), 1f, true);
+		this.text.setColour(1, 1, 1);
 		System.out.println("Pop up");
 		textShow = true;
 	}
@@ -161,6 +161,7 @@ public class EntityDetect {
 	}
 	
 	public void heartDecrease() {
+		count.setCount(tHeart);
 		
 	}
 	
