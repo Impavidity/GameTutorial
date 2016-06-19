@@ -73,8 +73,8 @@ public class MainGameLoop {
 	
 	public static void main(String[] args) {
 		
-		
-
+		int [] index = new int[20];
+		int cc =0;
 		DisplayManager.createDisplay();
 		UIratio = (float)DisplayManager.WIDTH / (float)DisplayManager.HEIGHT;
 		Loader loader = new Loader();
@@ -101,6 +101,7 @@ public class MainGameLoop {
 				palletData.getIndices());
 		TexturedModel pallet = new TexturedModel(palletModel,
 				new ModelTexture(loader.loadTexture("house")));
+		index[Entity.palletType] = cc++;
 		texturedModels.add(pallet);
 		
 		ModelData treeData = OBJFileLoader.loadOBJ("tree");		
@@ -111,6 +112,7 @@ public class MainGameLoop {
 		TexturedModel tree = new TexturedModel(treeModel, 
 						new ModelTexture(loader.loadTexture("tree")));
 		texturedModels.add(tree);
+		index[Entity.treeType] = cc++;
 		
 		
 		ModelData flowerData = OBJFileLoader.loadOBJ("grassModel");
@@ -123,6 +125,7 @@ public class MainGameLoop {
 		flower.getTexture().setHasTransparency(true);
 		flower.getTexture().setUseFakeLighting(true);
 		texturedModels.add(flower);
+		index[Entity.flowerType] = cc++;
 		
 		
 		ModelData fernData = OBJFileLoader.loadOBJ("fern");
@@ -134,6 +137,7 @@ public class MainGameLoop {
 				new ModelTexture(loader.loadTexture("fernTexture")));
 		fern.getTexture().setHasTransparency(true);
 		texturedModels.add(fern);
+		index[Entity.fernType] = cc++;
 		
 		ModelData lowPolyTreeData = OBJFileLoader.loadOBJ("lowPolyTree");
 		RawModel lowPolyTreeModel = loader.loadToVAO(lowPolyTreeData.getVertices(), 
@@ -143,6 +147,7 @@ public class MainGameLoop {
 		TexturedModel lowPolyTree = new TexturedModel(lowPolyTreeModel,
 				new ModelTexture(loader.loadTexture("lowPolyTree")));
 		texturedModels.add(lowPolyTree);
+		index[Entity.palletType] = cc++;
 		
 		ModelData lampData = OBJFileLoader.loadOBJ("lamp");
 		RawModel lampModel = loader.loadToVAO(lampData.getVertices(), 
@@ -209,7 +214,36 @@ public class MainGameLoop {
 		TexturedModel rock = new TexturedModel(rockModel,
 				new ModelTexture(loader.loadTexture("white")));
 		
-
+		ModelData oldhouseData = OBJFileLoader.loadOBJ("oldhouse");
+		RawModel oldhouseModel = loader.loadToVAO(oldhouseData.getVertices(), 
+				oldhouseData.getTextureCoords(), 
+				oldhouseData.getNormals(),
+				oldhouseData.getIndices());
+		TexturedModel oldhouse = new TexturedModel(oldhouseModel,
+				new ModelTexture(loader.loadTexture("oldhouse")));
+		List<Entity> entities = new ArrayList<Entity>();
+		/*
+		for(int i=1;i<=24;i++){
+			ModelData basictempleData = OBJFileLoader.loadOBJ("t" + i);
+			System.out.println("Here" + i);
+			RawModel basictempleModel = loader.loadToVAO(basictempleData.getVertices(), 
+					basictempleData.getTextureCoords(), 
+					basictempleData.getNormals(),
+					basictempleData.getIndices());
+			TexturedModel basictemple = new TexturedModel(basictempleModel,
+					new ModelTexture(loader.loadTexture("box")));
+			entities.add(new Entity(basictemple, new Vector3f(800, 10, 800), 0, 0, 0, 1, 14));
+		}
+		*/
+		ModelData basictempleData = OBJFileLoader.loadOBJ("temple");
+//		System.out.println("Here" + );
+		RawModel basictempleModel = loader.loadToVAO(basictempleData.getVertices(), 
+				basictempleData.getTextureCoords(), 
+				basictempleData.getNormals(),
+				basictempleData.getIndices());
+		TexturedModel basictemple = new TexturedModel(basictempleModel,
+				new ModelTexture(loader.loadTexture("box")));
+		entities.add(new Entity(basictemple, new Vector3f(800, 10, 800), 0, 0, 0, 0.5f, 14));
 
 		
 		Player player;
@@ -221,16 +255,16 @@ public class MainGameLoop {
 		terrains.add(terrain);
 		
 		
-		List<Entity> entities = new ArrayList<Entity>();
+		
 		Random random = new Random();
-		for (int i = 0; i< 5; i++) {
+		for (int i = 0; i< 1; i++) {
 
 				float x = random.nextFloat() *800;
 				float z = random.nextFloat() *800;
 				float y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(rock,
+				entities.add(new Entity(oldhouse,
 						new Vector3f(x,y,z),
-						0, 0, 0, 0.5f, Entity.treeType));
+						0, 0, 0, 2f, Entity.treeType));
 				for (int p=(int)x -5 ; p<=(int)x +5; p++) 
 					for (int q=(int)z -5; q<=(int)z+5; q++) {
 						if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
