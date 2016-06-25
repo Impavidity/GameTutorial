@@ -68,7 +68,7 @@ public class EntityDetect {
 			if (i == 0) 
 				pack = new GUIText("20" , gui_scale, font, pos , 1.5f, false);
 			else
-				pack = new GUIText("00" , gui_scale, font, pos , 1.5f, false);
+				pack = new GUIText("01" , gui_scale, font, pos , 1.5f, false);
 			pack.setColour(r ,g, b);
 			this.packText.add(pack);
 		}

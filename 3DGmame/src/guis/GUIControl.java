@@ -7,6 +7,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+
 import engineTester.MainGameLoop;
 import entities.Count;
 import entities.Entity;
@@ -83,18 +84,28 @@ public class GUIControl {
 		Entity temp = null;
 			if (terrainPoint == null) return null;
 			if (Keyboard.isKeyDown(Keyboard.KEY_F8) && Keyboard.isKeyDown(Keyboard.KEY_U) && count.getCount(EntityDetect.tFirecamp) >=1) {
-				temp = new Entity(MainGameLoop.texturedModels.get(EntityDetect.tFirecamp), terrainPoint, 0, 0, 0, 1, EntityDetect.tFirecamp);
+				temp = new Entity(MainGameLoop.texturedModels.get(MainGameLoop.index[EntityDetect.tFirecamp]), terrainPoint, 0, 0, 0, 1, EntityDetect.tFirecamp);
 				entities.add(temp);
 				count.minusCount(EntityDetect.tFirecamp, 1);
+				packText.get(EntityDetect.tFirecamp).remove();
+				Vector2f pos6 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tFirecamp));
+				GUIText pack6 = new GUIText(count.getCount(EntityDetect.tFirecamp) + "" , gui_scale, font, pos6 , 1.5f, false);
+				packText.set(EntityDetect.tFirecamp, pack6);
 			}
 
 			else if (Keyboard.isKeyDown(Keyboard.KEY_F10) && Keyboard.isKeyDown(Keyboard.KEY_U) && count.getCount(EntityDetect.tHouse) >=1) {
-				temp = new Entity(MainGameLoop.texturedModels.get(EntityDetect.tHouse), terrainPoint, 0, 0, 0, 1, EntityDetect.tHouse);
+				temp = new Entity(MainGameLoop.texturedModels.get(MainGameLoop.index[EntityDetect.tHouse]), new Vector3f(terrainPoint.x, terrainPoint.y, terrainPoint.z), 0, 0, 0, 1, EntityDetect.tHouse);
 				entities.add(temp);
 				count.minusCount(EntityDetect.tHouse, 1);
+				packText.get(EntityDetect.tHouse).remove();
+				Vector2f pos6 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tHouse));
+				GUIText pack6 = new GUIText(count.getCount(EntityDetect.tHouse) + "" , gui_scale, font, pos6 , 1.5f, false);
+				packText.set(EntityDetect.tHouse, pack6);
 			}
-			else if(Keyboard.isKeyDown(Keyboard.KEY_F11) && Keyboard.isKeyDown(Keyboard.KEY_U) && count.getCount(EntityDetect.tBoat) >=1){
-				temp = new Entity(MainGameLoop.texturedModels.get(EntityDetect.tBoat), terrainPoint, 0, 0, 0, 1, EntityDetect.tBoat);
+			else if(Keyboard.isKeyDown(Keyboard.KEY_F12) && Keyboard.isKeyDown(Keyboard.KEY_U) && count.getCount(EntityDetect.tBoat) >=1){
+				System.out.println("fuck you !!");
+				temp = new Entity(MainGameLoop.texturedModels.get(MainGameLoop.index[EntityDetect.tBoat]), new Vector3f(terrainPoint.x, terrainPoint.y, terrainPoint.z), 0, 0, 0, 8.0f, EntityDetect.tBoat);
+				
 				entities.add(temp);
 				count.minusCount(EntityDetect.tBoat, 1);
 				packText.get(EntityDetect.tBoat).remove();
@@ -129,7 +140,7 @@ public class GUIControl {
 		if (Keyboard.isKeyDown(Keyboard.KEY_F5)) {
 			if (count.getCount(EntityDetect.tFood) >= heartNfood) {
 				count.minusCount(EntityDetect.tFood, heartNfood);
-				count.setCount(EntityDetect.tHeart);
+				count.minusCount(EntityDetect.tHeart, -1);
 				
 				packText.get(EntityDetect.tFood).remove();
 				Vector2f pos1 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tFood));
@@ -138,12 +149,12 @@ public class GUIControl {
 				packText.get(EntityDetect.tHeart).remove();
 				Vector2f pos2 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tHeart));
 				GUIText pack2 = new GUIText(count.getCount(EntityDetect.tHeart) + "" , gui_scale, font, pos2 , 1.5f, false);
-				packText.set(EntityDetect.tFood, pack2);
+				packText.set(EntityDetect.tHeart, pack2);
 			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_F6)) {
 			if (count.getCount(EntityDetect.tTree) >= faxNtree && count.getCount(EntityDetect.tMineral) >= faxNmineral) {
-				count.minusCount(EntityDetect.tTree, 10);
+				count.minusCount(EntityDetect.tTree, faxNtree);
 				count.minusCount(EntityDetect.tMineral, faxNmineral);
 				count.setCount(EntityDetect.tFax);
 				
@@ -262,15 +273,15 @@ public class GUIControl {
 				packText.set(EntityDetect.tBoot, pack5);
 			}
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_F11)) {
-			if (count.getCount(EntityDetect.tTree) >= 40 && count.getCount(EntityDetect.tStone) >= 40 &&
-					count.getCount(EntityDetect.tMineral) >= 40 && count.getCount(EntityDetect.tFood) >= 20
-					&& count.getCount(EntityDetect.tFax)>= 3) {
-				count.minusCount(EntityDetect.tTree, 40);
-				count.minusCount(EntityDetect.tStone, 40);
-				count.minusCount(EntityDetect.tMineral, 40);
-				count.minusCount(EntityDetect.tFood, 20);
-				count.minusCount(EntityDetect.tFax, 3);
+		if (Keyboard.isKeyDown(Keyboard.KEY_F12)) {
+			if (count.getCount(EntityDetect.tTree) >= boatNtree && count.getCount(EntityDetect.tStone) >= boatNstone &&
+					count.getCount(EntityDetect.tMineral) >= boatNmineral && count.getCount(EntityDetect.tFood) >= boatNfood
+					&& count.getCount(EntityDetect.tFax)>= boatNfax) {
+				count.minusCount(EntityDetect.tTree, boatNtree);
+				count.minusCount(EntityDetect.tStone, boatNstone);
+				count.minusCount(EntityDetect.tMineral, boatNmineral);
+				count.minusCount(EntityDetect.tFood, boatNfood);
+				count.minusCount(EntityDetect.tFax, boatNfax);
 				count.setCount(EntityDetect.tBoat);
 				
 				packText.get(EntityDetect.tTree).remove();
@@ -295,7 +306,7 @@ public class GUIControl {
 				packText.set(EntityDetect.tFax, pack5);
 				packText.get(EntityDetect.tBoat).remove();
 				Vector2f pos6 = new Vector2f(x_base  ,z_base + (gui_dis*(float)EntityDetect.tBoat));
-				GUIText pack6 = new GUIText(count.getCount(EntityDetect.tBoat) + "" , gui_scale, font, pos5 , 1.5f, false);
+				GUIText pack6 = new GUIText(count.getCount(EntityDetect.tBoat) + "" , gui_scale, font, pos6 , 1.5f, false);
 				packText.set(EntityDetect.tBoat, pack6);
 			}
 		}

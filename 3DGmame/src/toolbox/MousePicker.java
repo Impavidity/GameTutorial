@@ -7,6 +7,8 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
+import com.sun.xml.internal.ws.policy.EffectiveAlternativeSelector;
+
 import terrains.Terrain;
 import entities.Camera;
 
@@ -96,7 +98,8 @@ public class MousePicker {
 			if (terrain != null) {
 				return endPoint;
 			} else {
-				return null;
+				//return null;
+				return endPoint;
 			}
 		}
 		if (intersectionInRange(start, half, ray)) {
@@ -122,6 +125,7 @@ public class MousePicker {
 		if (terrain != null) {
 			height = terrain.getHeightOfTerrain(testPoint.getX(), testPoint.getZ());
 		}
+		else height = 0;
 		if (testPoint.y < height) {
 			return true;
 		} else {
@@ -130,7 +134,9 @@ public class MousePicker {
 	}
 
 	private Terrain getTerrain(float worldX, float worldZ) {
+		if (worldX >= 0 && worldX <=terrain.getSize() && worldZ >= 0 && worldZ <= terrain.getSize())
 		return terrain;
+		else return null;
 	}
 
 }

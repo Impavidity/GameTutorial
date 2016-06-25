@@ -27,7 +27,7 @@ public class Count {
 	public static final int tBoat = 11;
 	
 	long cHeart = 20;
-	long cTree = 0, cStone = 0, cMineral = 0, cFood = 0, cFax = 0, cFire = 0, cFirecamp = 0, cTorch = 0, cHouse = 0, cBoot = 0, cBoat = 0;
+	long cTree = 0, cStone = 0, cMineral = 0, cFood = 0, cFax = 0, cFire = 0, cFirecamp = 0, cTorch = 0, cHouse = 0, cBoot = 0, cBoat = 2;
 	
 	public long getCount(int type) {
 		switch (type) {

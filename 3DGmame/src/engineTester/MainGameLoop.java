@@ -65,6 +65,7 @@ public class MainGameLoop {
 
 	
 	public static List<TexturedModel> texturedModels = new ArrayList<TexturedModel>();
+	public static int [] index = new int[20];
 	
 	public static int textTime = 0;
 	
@@ -73,7 +74,7 @@ public class MainGameLoop {
 	
 	public static void main(String[] args) {
 		
-		int [] index = new int[20];
+		
 		int cc =0;
 		DisplayManager.createDisplay();
 		UIratio = (float)DisplayManager.WIDTH / (float)DisplayManager.HEIGHT;
@@ -293,7 +294,7 @@ public class MainGameLoop {
 		TexturedModel rabbit = new TexturedModel(rabbitModel,
 				new ModelTexture(loader.loadTexture("rabbit")));
 		texturedModels.add(rabbit);
-		index[EntityDetect.tRabbit] = cc++;		
+		index[EntityDetect.tFood] = cc++;		
 		//entities.add(new Entity(rabbit, new Vector3f(600, 30, 600), 0, 0, 0, 10.0f, EntityDetect.tRabbit));
 		
 		Player player = new Player(prince, new Vector3f(700, 0, 700), 0f, 0f, 0f ,0.2f);
@@ -365,7 +366,7 @@ public class MainGameLoop {
 			float z = random.nextFloat() *1600;
 			float y = terrain.getHeightOfTerrain(x, z);
 			entities.add(new Entity(rabbit,
-					new Vector3f(x,y,z),0, 0, 0,  random.nextFloat()* 1.5f, EntityDetect.tRabbit));
+					new Vector3f(x,y,z),0, 0, 0,  random.nextFloat()* 1.5f, EntityDetect.tFood));
 			for (int p=(int)x -5 ; p<=(int)x +5; p++) 
 				for (int q=(int)z -5; q<=(int)z+5; q++) {
 					if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
@@ -378,7 +379,7 @@ public class MainGameLoop {
 			float z = random.nextFloat() *1600;
 			float y = terrain.getHeightOfTerrain(x, z);
 			entities.add(new Entity(rabbit,
-					new Vector3f(x,y,z),0, 0, 0, 8.0f, EntityDetect.tRabbit));
+					new Vector3f(x,y,z),0, 0, 0, 8.0f, EntityDetect.tFood));
 			for (int p=(int)x -5 ; p<=(int)x +5; p++) 
 				for (int q=(int)z -5; q<=(int)z+5; q++) {
 					if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
@@ -577,11 +578,11 @@ public class MainGameLoop {
 			if (entityClick != null) {
 				entityClickFlag = true;
 				if (terrainPoint!=null) {
-					entityClick.setPosition(terrainPoint);
+					entityClick.setPosition(new Vector3f(terrainPoint.x, terrainPoint.y+30.0f, terrainPoint.z));
 					if (Mouse.isButtonDown(0)) {
 						if(entityClick.getEntityType() == entityDetect.tBoat && 
 								terrainPoint.getX()<1600 && terrainPoint.getX() >0 
-								&& terrainPoint.getZ() <0 && terrainPoint.getZ()>-1600)
+								&& terrainPoint.getZ() <1600 && terrainPoint.getZ()>0)
 						{
 							entityDetect.textPopUp("Boat should be put out of the terrain!");
 						}
@@ -589,6 +590,8 @@ public class MainGameLoop {
 						entityClick = null;
 						entityClickFlag = false;
 						}
+					} else {
+						
 					}
 				}
 			}
