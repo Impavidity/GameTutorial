@@ -272,7 +272,7 @@ public class MainGameLoop {
 				new ModelTexture(loader.loadTexture("mineral")));
 		texturedModels.add(mine);
 		index[EntityDetect.tMineral] = cc++;		
-		entities.add(new Entity(mine, new Vector3f(1000, 10, 800), 0, 0, 0, 6.0f, 14));
+		//entities.add(new Entity(mine, new Vector3f(1000, 10, 800), 0, 0, 0, 6.0f, 14));
 		
 		ModelData boatData = OBJFileLoader.loadOBJ("boat");
 		RawModel boatModel = loader.loadToVAO(boatData.getVertices(), 
@@ -283,7 +283,7 @@ public class MainGameLoop {
 				new ModelTexture(loader.loadTexture("boat")));
 		texturedModels.add(boat);
 		index[EntityDetect.tBoat] = cc++;		
-		entities.add(new Entity(boat, new Vector3f(700, 30, 700), 0, 0, 0, 10.0f, EntityDetect.tBoat));
+		//entities.add(new Entity(boat, new Vector3f(700, 30, 700), 0, 0, 0, 10.0f, EntityDetect.tBoat));
 		
 		ModelData rabbitData = OBJFileLoader.loadOBJ("Rabbit");
 		RawModel rabbitModel = loader.loadToVAO(rabbitData.getVertices(), 
@@ -294,7 +294,7 @@ public class MainGameLoop {
 				new ModelTexture(loader.loadTexture("rabbit")));
 		texturedModels.add(rabbit);
 		index[EntityDetect.tRabbit] = cc++;		
-		entities.add(new Entity(rabbit, new Vector3f(600, 30, 600), 0, 0, 0, 10.0f, EntityDetect.tRabbit));
+		//entities.add(new Entity(rabbit, new Vector3f(600, 30, 600), 0, 0, 0, 10.0f, EntityDetect.tRabbit));
 		
 		Player player = new Player(prince, new Vector3f(700, 0, 700), 0f, 0f, 0f ,0.2f);
 
@@ -373,12 +373,12 @@ public class MainGameLoop {
 					detectMap[p][q] = true;
 				}
 	}
-		for (int i = 0; i< 10; i++) {
+		for (int i = 0; i< 50; i++) {
 			float x = random.nextFloat() *1600;
 			float z = random.nextFloat() *1600;
 			float y = terrain.getHeightOfTerrain(x, z);
-			entities.add(new Entity(ball,
-					new Vector3f(x,y,z),0, 0, 0, 0.5f, EntityDetect.tRabbit));
+			entities.add(new Entity(rabbit,
+					new Vector3f(x,y,z),0, 0, 0, 8.0f, EntityDetect.tRabbit));
 			for (int p=(int)x -5 ; p<=(int)x +5; p++) 
 				for (int q=(int)z -5; q<=(int)z+5; q++) {
 					if (p<0 || p>=Terrain.getSize() || q<0 || q>=Terrain.getSize())
@@ -579,8 +579,16 @@ public class MainGameLoop {
 				if (terrainPoint!=null) {
 					entityClick.setPosition(terrainPoint);
 					if (Mouse.isButtonDown(0)) {
+						if(entityClick.getEntityType() == entityDetect.tBoat && 
+								terrainPoint.getX()<1600 && terrainPoint.getX() >0 
+								&& terrainPoint.getZ() <0 && terrainPoint.getZ()>-1600)
+						{
+							entityDetect.textPopUp("Boat should be put out of the terrain!");
+						}
+						else{
 						entityClick = null;
 						entityClickFlag = false;
+						}
 					}
 				}
 			}
@@ -615,7 +623,7 @@ public class MainGameLoop {
 			uiManager.checkUIClick();
 			TextMaster.render();
 			HeartCount ++;
-			if (HeartCount == 20) {
+			if (HeartCount == 2000) {
 				entityDetect.heartDecrease();
 				if (count.getCount(EntityDetect.tHeart) >= 0) {
 					packText.get(EntityDetect.tHeart).remove();
