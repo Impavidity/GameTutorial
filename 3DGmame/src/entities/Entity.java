@@ -21,6 +21,7 @@ public class Entity {
 	private boolean valid = true;
 	private boolean clicked = false;
 	private int entityType = 0;
+	private boolean pet = false;
 	
 	private int textureIndex = 0; 
 	
@@ -150,6 +151,13 @@ public class Entity {
 		this.model = model;
 	}
 	
+	public void setPet() {
+		pet = true;
+	}
+	
+	public boolean getPet() {
+		return pet;
+	}
 
 	
 	
