@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>windows</name>
+			<type>2</type>
+			<location>H:/Study/graphics/lwjgl-2.9.3/lwjgl-2.9.3/native/windows</location>
+		</link>
+	</linkedResources>
 </projectDescription>

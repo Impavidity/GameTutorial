@@ -5,6 +5,11 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="3DGmame/lib/natives-linux"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="windows">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="H:/Study/graphics/lwjgl-2.9.3/lwjgl-2.9.3/native/windows"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jars/AppleJavaExtensions.jar"/>
 	<classpathentry kind="lib" path="lib/jars/asm-debug-all.jar"/>
