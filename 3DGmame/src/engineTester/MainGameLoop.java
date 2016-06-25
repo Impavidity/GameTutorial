@@ -31,6 +31,7 @@ import entities.Entity;
 import entities.EntityDetect;
 import entities.Light;
 import entities.Player;
+import entities.RunAnimal;
 import fontMeshCreator.FontType;
 import fontMeshCreator.GUIText;
 import fontRendering.TextMaster;
@@ -306,7 +307,7 @@ public class MainGameLoop {
 		
 		Random random = new Random();
 		entities.add(new Entity(basictemple, new Vector3f(500, 30, 800), 0, 0, 0, 1.5f, 14));
-		for (int i = 0; i< 400; i++) {
+		for (int i = 0; i< 4; i++) {
 				float x = random.nextFloat() *1600;
 				float z = random.nextFloat() *1600;
 				float y = terrain.getHeightOfTerrain(x, z);
@@ -319,7 +320,7 @@ public class MainGameLoop {
 						detectMap[p][q] = true;
 					}
 		}
-		for (int i = 0; i< 400; i++) {
+		for (int i = 0; i< 4; i++) {
 			float x = random.nextFloat() *1600;
 			float z = random.nextFloat() *1600;
 			float y = terrain.getHeightOfTerrain(x, z);
@@ -333,7 +334,7 @@ public class MainGameLoop {
 				}
 	}
 		
-		for (int i = 0; i< 300; i++) {
+		for (int i = 0; i< 3; i++) {
 			float x = random.nextFloat() *1600;
 			float z = random.nextFloat() *1600;
 			float y = terrain.getHeightOfTerrain(x, z);
@@ -347,7 +348,7 @@ public class MainGameLoop {
 				}
 	}
 		
-		for (int i = 0; i< 100; i++) {
+		for (int i = 0; i< 1; i++) {
 			float x = random.nextFloat() *1600;
 			float z = random.nextFloat() *1600;
 			float y = terrain.getHeightOfTerrain(x, z);
@@ -360,7 +361,7 @@ public class MainGameLoop {
 					detectMap[p][q] = true;
 				}
 	}
-		for (int i = 0; i< 30; i++) {
+		for (int i = 0; i< 3; i++) {
 			float x = random.nextFloat() *1600;
 			float z = random.nextFloat() *1600;
 			float y = terrain.getHeightOfTerrain(x, z);
@@ -373,7 +374,7 @@ public class MainGameLoop {
 					detectMap[p][q] = true;
 				}
 	}
-		for (int i = 0; i< 50; i++) {
+		for (int i = 0; i< 500; i++) {
 			float x = random.nextFloat() *1600;
 			float z = random.nextFloat() *1600;
 			float y = terrain.getHeightOfTerrain(x, z);
@@ -509,6 +510,8 @@ public class MainGameLoop {
 		
 		int HeartCount = 0;
 		
+		RunAnimal runAnimal = new RunAnimal(terrain);
+		
 		//
 		while(!Display.isCloseRequested()){
 			lightness = renderer.getLightness();
@@ -534,9 +537,12 @@ public class MainGameLoop {
 			float distance = 2* (camera.getPosition().y - water.getHeight());
 			camera.getPosition().y  -= distance;
 			camera.invertPitch();
-			for (Entity entity : entities) {
-				if (entity == null) System.out.println("There is a null");
-			}
+			if (HeartCount % 5 == 0)
+				for (Entity entity : entities) {
+					if (entity.getEntityType() == EntityDetect.tRabbit) {
+						runAnimal.randomRun(entity, player);
+					}
+				}
 			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, 1, 0, -water.getHeight()));
 			camera.getPosition().y += distance;
 			camera.invertPitch();
@@ -647,6 +653,8 @@ public class MainGameLoop {
 			if (count.getCount(EntityDetect.tHeart) <= -20) {
 				break;
 			}
+			
+			
 			
 			uiManager.GoodTrans();
 			DisplayManager.updateDisplay();

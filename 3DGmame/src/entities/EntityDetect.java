@@ -82,8 +82,11 @@ public class EntityDetect {
 				if (playerIsNearEntity(positionPlayer, entity.getPosition()) && 
 						mouseIsNearEntity(position, entity.getPosition())) {
 					int type = entity.getEntityType();
-					if (type == tPlayer || type == tFire || type == tHouse || type == tFirecamp){
+					if (type == tPlayer || type == tFire || type == tHouse || type == tFirecamp || type == tRabbit){
 						entity.setValid(true);
+						if (entity.getEntityType() == tRabbit) {
+							entity.setPet();
+						}
 					}else {
 						entity.setValid(false);
 						int x = (int)entity.getPosition().x;
@@ -97,7 +100,9 @@ public class EntityDetect {
 							entity.setClicked(true);
 							//if (textShow) textShutDown();
 							//textPopUp();
-							
+							if (entity.getEntityType() == tRabbit) {
+								
+							} else
 							increase(type);
 							//System.out.println(getTypeName(type) + "  :  " + count.getCount(type));
 						}
