@@ -455,7 +455,7 @@ public class MainGameLoop {
 		
 		// ************************** GUI ***********************************************
 		//Terrain terrain2 = new Terrain(0, 2,loader, texturePack, blendMap, "heightmap");
-		
+	
 
 		ParticleMaster.init(loader, renderer.getProjectionMatrix());
 		
@@ -569,6 +569,7 @@ public class MainGameLoop {
 			}
 			*/
 			//system.generateParticles(player.getPosition());
+			
 			if (entityClickFlag == false) {
 				entityClick = uiManager.checkKeyWithObject(entities, picker);
 				system = uiManager.checkKeyWithParticle(picker, particleTexture);
@@ -614,6 +615,7 @@ public class MainGameLoop {
 			
 			uiManager.checkUIClick();
 			TextMaster.render();
+			
 			HeartCount ++;
 			if (HeartCount == 20) {
 				entityDetect.heartDecrease();
@@ -637,6 +639,7 @@ public class MainGameLoop {
 			if (count.getCount(EntityDetect.tHeart) <= -20) {
 				break;
 			}
+			
 			uiManager.GoodTrans();
 			DisplayManager.updateDisplay();
 			
